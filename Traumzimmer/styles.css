@@ -1,0 +1,38 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    background-image: url('images/Headerview.PNG');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 800px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.container {
+    z-index: 1; /* Stellt sicher, dass der Text über dem Bild angezeigt wird */
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Halbtransparenter Overlay, damit der Text besser lesbar ist */
+    z-index: 0; /* Hintergrundebene, damit der Overlay hinter dem Text liegt */
+}
+
+h1, .lead {
+    margin: 0;
+    z-index: 1; /* Text wird über dem Overlay und Bild angezeigt */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Schattierung für bessere Lesbarkeit */
+}

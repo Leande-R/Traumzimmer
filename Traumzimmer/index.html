@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Traumzimmer - Ein Ort der Ruhe und Entspannung, an dem Träume zur Wirklichkeit werden</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css"> <!-- Link to styles.css -->
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="logo.png" alt="Logo" style="height: 40px;"> <!-- Logo-Bild einfügen -->
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="countryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Land auswählen
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="countryDropdown">
+                            <li><a class="dropdown-item" href="#">Deutschland</a></li>
+                            <li><a class="dropdown-item" href="#">Österreich</a></li>
+                            <li><a class="dropdown-item" href="#">Schweiz</a></li>
+                            <li><a class="dropdown-item" href="#">Frankreich</a></li>
+                            <li><a class="dropdown-item" href="#">Italien</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="currencyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Währung ändern
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="currencyDropdown">
+                            <li><a class="dropdown-item" href="#">EUR - Euro</a></li>
+                            <li><a class="dropdown-item" href="#">CHF - Schweizer Franken</a></li>
+                            <li><a class="dropdown-item" href="#">USD - US-Dollar</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            Einloggen <i class="fas fa-sign-in-alt"></i> <!-- Icon für Einloggen -->
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+
+<!-- Header-Bereich -->
+ 
+<header class="header">
+    <div class="container text-white text-center py-5">
+        <h1>Willkommen bei Traumzimmer</h1>
+        <p class="lead">Finden Sie Ihr perfektes Zimmer, um den Alltag hinter sich zu lassen!</p>
+    </div>
+</header>
+
+
+<section class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form class="row g-3">
+                <div class="col-md-6">
+                    <label for="destination" class="form-label">Gäste</label>
+                    <input type="text" class="form-control" id="destination" placeholder="Anzahl der Gäste">
+                </div>
+                <div class="col-md-3">
+                    <label for="checkin" class="form-label">Anreisedatum</label>
+                    <input type="date" class="form-control" id="checkin">
+                </div>
+                <div class="col-md-3">
+                    <label for="checkout" class="form-label">Abreisedatum</label>
+                    <input type="date" class="form-control" id="checkout">
+                   
+                </div>
+                <div class="col-12 text-center mt-3">
+                    <button type="submit" class="btn btn-primary">Suchen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Bildergalerie -->
+<section class="container my-5">
+    <h2 class="text-center mb-4">Beliebte Hotels</h2>
+    <div class="gallery-container">
+        <div class="gallery-item">
+            <img src="hotel1.jpg" alt="Hotel 1" class="img-fluid">
+            <h5 class="mt-2">Luxus-Hotel am Meer</h5>
+            <p>Genießen Sie den atemberaubenden Ausblick und exzellenten Service.</p>
+        </div>
+        <div class="gallery-item">
+            <img src="hotel2.jpg" alt="Hotel 2" class="img-fluid">
+            <h5 class="mt-2">Stadt-Hotel Deluxe</h5>
+            <p>Im Herzen der Stadt mit erstklassiger Anbindung und Komfort.</p>
+        </div>
+        <div class="gallery-item">
+            <img src="hotel3.jpg" alt="Hotel 3" class="img-fluid">
+            <h5 class="mt-2">Wellness-Hotel in den Bergen</h5>
+            <p>Perfekt für Erholung und Abenteuer inmitten der Natur.</p>
+        </div>
+        <div class="gallery-item">
+            <img src="hotel4.jpg" alt="Hotel 4" class="img-fluid">
+            <h5 class="mt-2">Historisches Schloss-Hotel</h5>
+            <p>Erleben Sie Luxus und Tradition in einer beeindruckenden Umgebung.</p>
+        </div>
+        <div class="gallery-item">
+            <img src="hotel5.jpg" alt="Hotel 5" class="img-fluid">
+            <h5 class="mt-2">Tropisches Strandresort</h5>
+            <p>Direkt am Strand mit tropischem Garten und Infinity-Pool.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-3">
+    <div class="container">
+        <p>&copy; 2024 Traumzimmer - Ihr Helfer beim Hotelbuchen</p>
+        <p>
+            <a href="Impressum.html" class="text-white text-decoration-none">Impressum</a> | 
+            <a href="Hilfe.html" class="text-white text-decoration-none">Hilfe</a>
+        </p>
+    </div>
+</footer>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>
+
