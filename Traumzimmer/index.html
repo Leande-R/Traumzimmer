@@ -13,7 +13,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="logo.png" alt="Logo" style="height: 40px;"> <!-- Logo-Bild einfügen -->
+                <img src="images/LogoBreit.png" alt="Logo" style="height: 60px;">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -21,29 +21,23 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="countryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Land auswählen
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Deutsch
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="countryDropdown">
-                            <li><a class="dropdown-item" href="#">Deutschland</a></li>
-                            <li><a class="dropdown-item" href="#">Österreich</a></li>
-                            <li><a class="dropdown-item" href="#">Schweiz</a></li>
-                            <li><a class="dropdown-item" href="#">Frankreich</a></li>
-                            <li><a class="dropdown-item" href="#">Italien</a></li>
+                        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                            <li><a class="dropdown-item" href="#" onclick="setLanguage('English')">English</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="currencyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Währung ändern
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Euro €
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="currencyDropdown">
-                            <li><a class="dropdown-item" href="#">EUR - Euro</a></li>
-                            <li><a class="dropdown-item" href="#">CHF - Schweizer Franken</a></li>
-                            <li><a class="dropdown-item" href="#">USD - US-Dollar</a></li>
+                        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                            <li><a class="dropdown-item" href="#" onclick="setCurrency">US-Dollar $</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="LogIn.html">
                             Einloggen <i class="fas fa-sign-in-alt"></i> <!-- Icon für Einloggen -->
                         </a>
                     </li>
@@ -65,66 +59,147 @@
 
 <section class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <form class="row g-3">
-                <div class="col-md-6">
-                    <label for="destination" class="form-label">Gäste</label>
-                    <input type="text" class="form-control" id="destination" placeholder="Anzahl der Gäste">
+        <div class="col-md-10">
+            <form class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label for="guestsRoomsDropdown" class="form-label">Gäste und Zimmer</label>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary w-100 dropdown-toggle" type="button" id="guestsRoomsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Gäste und Zimmer auswählen
+                        </button>
+                        <ul class="dropdown-menu p-3 w-100" aria-labelledby="guestsRoomsDropdown">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <label class="form-label mb-0">Anzahl der Gäste</label>
+                                <div class="input-group" style="width: 120px;">
+                                    <input type="number" class="form-control text-center" id="guestsCount" value="1" min="1" max="10" step="1">
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <label class="form-label mb-0">Anzahl der Zimmer</label>
+                                <div class="input-group" style="width: 120px;">
+                                    <input type="number" class="form-control text-center" id="roomsCount" value="1" min="1" max="10" step="1">
+                                </div>
+                            </div>
+                        </ul>
+                    </div>
                 </div>
+
                 <div class="col-md-3">
                     <label for="checkin" class="form-label">Anreisedatum</label>
                     <input type="date" class="form-control" id="checkin">
                 </div>
+
                 <div class="col-md-3">
                     <label for="checkout" class="form-label">Abreisedatum</label>
                     <input type="date" class="form-control" id="checkout">
-                   
                 </div>
-                <div class="col-12 text-center mt-3">
-                    <button type="submit" class="btn btn-primary">Suchen</button>
+
+                <div class="col-md-2 text-center">
+                    <button type="submit" class="btn btn-primary w-100">buchen</button>
                 </div>
             </form>
         </div>
     </div>
 </section>
 
-<!-- Bildergalerie -->
-<section class="container my-5">
-    <h2 class="text-center mb-4">Beliebte Hotels</h2>
-    <div class="gallery-container">
-        <div class="gallery-item">
-            <img src="hotel1.jpg" alt="Hotel 1" class="img-fluid">
-            <h5 class="mt-2">Luxus-Hotel am Meer</h5>
-            <p>Genießen Sie den atemberaubenden Ausblick und exzellenten Service.</p>
+
+
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div id="carouselExampleIndicators1" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img class="d-block w-100" src="images/Hotel1_5.jpg" alt="Slide 1">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" src="images/Hotel2_4.jpg" alt="Slide 2">
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators1" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators1" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Doppel Zimmer Premium</h5>
+                    <p class="card-text">Erleben Sie höchsten Wohnkomfort in unserem Doppelzimmer Premium, das stilvolle Akzente und moderne Annehmlichkeiten für einen unvergesslichen Aufenthalt bietet.</p>
+                    <a href="#" class="btn btn-primary">Jetzt buchen</a>
+                </div>
+            </div>
         </div>
-        <div class="gallery-item">
-            <img src="hotel2.jpg" alt="Hotel 2" class="img-fluid">
-            <h5 class="mt-2">Stadt-Hotel Deluxe</h5>
-            <p>Im Herzen der Stadt mit erstklassiger Anbindung und Komfort.</p>
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div id="carouselExampleIndicators2" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img class="d-block w-100" src="images/Hotel1_1.jpg" alt="Slide 1">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" src="images/Hotel2_7.jpg" alt="Slide 2">
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators2" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Doppel Zimmer Deluxe</h5>
+                    <p class="card-text">Genießen Sie ultimativen Komfort in unserem Doppelzimmer Deluxe, ausgestattet mit luxuriöser Einrichtung und atemberaubendem Blick auf die Natur.</p>
+                    <a href="#" class="btn btn-primary">Jetzt buchen</a>
+                </div>
+            </div>
         </div>
-        <div class="gallery-item">
-            <img src="hotel3.jpg" alt="Hotel 3" class="img-fluid">
-            <h5 class="mt-2">Wellness-Hotel in den Bergen</h5>
-            <p>Perfekt für Erholung und Abenteuer inmitten der Natur.</p>
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div id="carouselExampleIndicators3" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img class="d-block w-100" src="images/Hotel1_8.jpg" alt="Slide 1">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" src="images/Hotel2_6.jpg" alt="Slide 2">
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators3" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators3" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Doppel Zimmer Standard</h5>
+                    <p class="card-text">Unser Doppelzimmer Standard bietet Ihnen eine gemütliche Atmosphäre und ist ideal für Reisende, die eine praktische und komfortable Unterkunft suchen.</p>
+                    <a href="#" class="btn btn-primary">Jetzt buchen</a>
+                </div>
+            </div>
         </div>
-        <div class="gallery-item">
-            <img src="hotel4.jpg" alt="Hotel 4" class="img-fluid">
-            <h5 class="mt-2">Historisches Schloss-Hotel</h5>
-            <p>Erleben Sie Luxus und Tradition in einer beeindruckenden Umgebung.</p>
-        </div>
-        <div class="gallery-item">
-            <img src="hotel5.jpg" alt="Hotel 5" class="img-fluid">
-            <h5 class="mt-2">Tropisches Strandresort</h5>
-            <p>Direkt am Strand mit tropischem Garten und Infinity-Pool.</p>
-        </div>
+
     </div>
-</section>
+</div>
+
 
 
 <!-- Footer -->
 <footer class="bg-dark text-white text-center py-3">
     <div class="container">
-        <p>&copy; 2024 Traumzimmer - Ihr Helfer beim Hotelbuchen</p>
+        <p>&copy; 2024 Traumzimmer - Ein Ort des Wohlfühlens</p>
         <p>
             <a href="Impressum.html" class="text-white text-decoration-none">Impressum</a> | 
             <a href="Hilfe.html" class="text-white text-decoration-none">Hilfe</a>
