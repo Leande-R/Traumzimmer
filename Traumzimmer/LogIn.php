@@ -1,10 +1,20 @@
 <?php
 session_start();
 
-// Beispiel-Benutzer mit Passwort (normalerweise aus einer Datenbank)
+// Beispiel-Benutzer mit Passwort und weiteren Attributen (normalerweise aus einer Datenbank)
 $users = [
-    'admin' => password_hash('1234', PASSWORD_DEFAULT), // Benutzername: admin, Passwort: 1234
-    'user1' => password_hash('passwort', PASSWORD_DEFAULT) // Benutzername: user1, Passwort: passwort
+    'admin' => [
+        'password' => password_hash('1234', PASSWORD_DEFAULT),
+        'vorname' => 'Max',
+        'nachname' => 'Mustermann',
+        'email' => 'max@mustermann.de'
+    ],
+    'user1' => [
+        'password' => password_hash('passwort', PASSWORD_DEFAULT),
+        'vorname' => 'Eva',
+        'nachname' => 'Schmidt',
+        'email' => 'eva@schmidt.de'
+    ]
 ];
 
 $error = '';
@@ -14,9 +24,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
 
-    if (isset($users[$username]) && password_verify($password, $users[$username])) {
+    if (isset($users[$username]) && password_verify($password, $users[$username]['password'])) {
         // Login erfolgreich
         $_SESSION['username'] = $username;
+        $_SESSION['vorname'] = $users[$username]['vorname'];
+        $_SESSION['nachname'] = $users[$username]['nachname'];
+        $_SESSION['email'] = $users[$username]['email'];
         header('Location: index.php'); // Weiterleitung zur Startseite
         exit;
     } else {
