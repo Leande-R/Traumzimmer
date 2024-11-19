@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['vorname'] = $users[$username]['vorname'];
         $_SESSION['nachname'] = $users[$username]['nachname'];
         $_SESSION['email'] = $users[$username]['email'];
+        $_SESSION['loggedin'] = true; // Mark the user as logged in
         header('Location: index.php'); // Weiterleitung zur Startseite
         exit;
     } else {
