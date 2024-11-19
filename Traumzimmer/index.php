@@ -1,3 +1,12 @@
+
+<?php 
+
+session_start();
+
+/*session is started if you don't write this line can't use $_Session  global variable*/
+
+
+?>
 <!doctype html>
 <html lang="de">
   <head>
@@ -10,41 +19,7 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="images/LogoBreit.png" alt="Logo" style="height: 60px;">
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Deutsch
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-                            <li><a class="dropdown-item" href="#" onclick="setLanguage('English')">English</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Euro €
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-                            <li><a class="dropdown-item" href="#" onclick="setCurrency">US-Dollar $</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="LogIn.html">
-                            Einloggen <i class="fas fa-sign-in-alt"></i> <!-- Icon für Einloggen -->
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<?php include 'navbar.php'; ?> <!-- Include the navbar -->
     
 
 <!-- Header-Bereich -->
@@ -197,15 +172,7 @@
 
 
 <!-- Footer -->
-<footer class="bg-dark text-white text-center py-3">
-    <div class="container">
-        <p>&copy; 2024 Traumzimmer - Ein Ort des Wohlfühlens</p>
-        <p>
-            <a href="Impressum.html" class="text-white text-decoration-none">Impressum</a> | 
-            <a href="Hilfe.html" class="text-white text-decoration-none">Hilfe</a>
-        </p>
-    </div>
-</footer>
+<?php include 'footer.php'; ?> 
 
 
 

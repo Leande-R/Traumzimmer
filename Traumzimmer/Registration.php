@@ -66,15 +66,8 @@
     </div>
 
    <!-- Footer -->
-<footer class="bg-dark text-white text-center py-3" style="background-color: transparent;">
-    <div class="container-fluid"> <!-- Ändere container zu container-fluid für volle Breite -->
-        <p>&copy; 2024 Traumzimmer - Ein Ort des Wohlfühlens</p>
-        <p>
-            <a href="Impressum.html" class="text-white text-decoration-none">Impressum</a> | 
-            <a href="Hilfe.html" class="text-white text-decoration-none">Hilfe</a>
-        </p>
-    </div>
-</footer>
+
+<?php include 'footer.php'; ?> 
 
   
 </body>

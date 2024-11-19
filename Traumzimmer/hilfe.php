@@ -42,21 +42,12 @@
 </head>
 <body>
     <header>
-        <div>
-            padding: 100px;
-        </div>
+        <div style="padding: 100px;"></div>
         <h1>Traumzimmer FAQ</h1>
-        <div>
-            padding: 500px;
-        </div>
-         <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="images/LogoBreit.png" alt="Logo" style="height: 60px;">
-            </a>
-        </div>
-    </nav>
+        <div style="padding: 500px;"></div>
+        
+        <?php include 'navbar.php'; ?> <!-- Include the navbar -->
+
     </header>
     <div class="container">
         <section class="faq-section">
@@ -94,16 +85,9 @@
         </section>
     </div>
 
+    <!-- Footer -->
+    <?php include 'footer.php'; ?> 
 
-    <footer class="bg-dark text-white text-center py-3" style="background-color: transparent;">
-        <div class="container-fluid">
-            <p>&copy; 2024 Traumzimmer - Ein Ort des Wohlfühlens</p>
-            <p>
-                <a href="Impressum.html" class="text-white text-decoration-none">Impressum</a> | 
-                <a href="Hilfe.html" class="text-white text-decoration-none">Hilfe</a>
-            </p>
-        </div>
-    </footer>
     <!-- Include Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

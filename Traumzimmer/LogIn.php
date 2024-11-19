@@ -54,7 +54,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="index.php">
                 <img src="images/LogoBreit.png" alt="Logo" style="height: 60px;">
             </a>
         </div>
@@ -81,20 +81,12 @@
 
         <!-- Registrierung Hinweis -->
         <div class="mt-3">
-            <p>Noch keinen Account? <a href="Registration.html">Hier registrieren</a>.</p>
+            <p>Noch keinen Account? <a href="Registration.php">Hier registrieren</a>.</p>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3" style="background-color: transparent;">
-        <div class="container-fluid">
-            <p>&copy; 2024 Traumzimmer - Ein Ort des Wohlfühlens</p>
-            <p>
-                <a href="Impressum.html" class="text-white text-decoration-none">Impressum</a> | 
-                <a href="Hilfe.html" class="text-white text-decoration-none">Hilfe</a>
-            </p>
-        </div>
-    </footer>
+<?php include 'footer.php'; ?> 
 
     <!-- Bootstrap JS und Abhängigkeiten -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
