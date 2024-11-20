@@ -25,14 +25,38 @@ session_start();
 <section class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <?php
-                // Anreisedatum und Abreisedatum aus GET-Parametern lesen
-                $checkin = isset($_GET['checkin']) ? htmlspecialchars($_GET['checkin']) : 'nicht angegeben';
-                $checkout = isset($_GET['checkout']) ? htmlspecialchars($_GET['checkout']) : 'nicht angegeben';
-            ?>
+        <?php
+            // Guest-Anzahl aus URL-Parameter auslesen
+            $guests = isset($_GET['guests']) ? intval($_GET['guests']) : 1;
+
+            // Lokalisierung auf Deutsch setzen
+            setlocale(LC_TIME, 'de_DE.UTF-8', 'de_DE', 'deu_deu');
+
+            // Datumsformat anpassen
+            $checkin = isset($_GET['checkin']) ? htmlspecialchars($_GET['checkin']) : 'nicht angegeben';
+            $checkout = isset($_GET['checkout']) ? htmlspecialchars($_GET['checkout']) : 'nicht angegeben';
+
+            // Wochentag und Datum formatieren
+            if ($checkin !== 'nicht angegeben') {
+                $checkinFormatted = strftime('%A - %d.%m.%Y', strtotime($checkin));
+            } else {
+                $checkinFormatted = 'nicht angegeben';
+            }
+
+            if ($checkout !== 'nicht angegeben') {
+                $checkoutFormatted = strftime('%A - %d.%m.%Y', strtotime($checkout));
+            } else {
+                $checkoutFormatted = 'nicht angegeben';
+            }
+        ?>
 
             <!-- Titel -->
-            <h1 class="mb-4">Verfügbare Zimmer für den Zeitraum: <?php echo "$checkin bis $checkout"; ?></h1>
+            <h1 class="mb-4 text-center" style="color: black; font-weight: normal; font-size: 2.5rem; text-shadow: none;">
+                Verfügbare Zimmer für den Zeitraum:<br>
+                <span style="font-weight: normal;"><?php echo $checkinFormatted; ?></span><br>
+                bis<br>
+                <span style="font-weight: normal;"><?php echo $checkoutFormatted; ?></span>
+            </h1>
         </div>
     </div>
 </section>
@@ -65,7 +89,7 @@ session_start();
             <div class="card-body" style="flex: 1; padding-left: 20px;">
                 <h5 class="card-title">Doppelzimmer Premium</h5>
                 <p class="card-text">Erleben Sie höchsten Wohnkomfort in unserem Doppelzimmer Premium, das stilvolle Akzente und moderne Annehmlichkeiten für einen unvergesslichen Aufenthalt bietet.</p>
-                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&zimmer=Doppelzimmer Premium" class="btn btn-primary">Jetzt buchen</a>            </div>
+                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&guests=<?php echo $guests; ?>&zimmer=Doppelzimmer Premium" class="btn btn-primary">Jetzt buchen</a>            </div>
         </div>
 
         <!-- Doppelzimmer Deluxe -->
@@ -93,7 +117,7 @@ session_start();
             <div class="card-body" style="flex: 1; padding-left: 20px;">
                 <h5 class="card-title">Doppelzimmer Deluxe</h5>
                 <p class="card-text">Genießen Sie ultimativen Komfort in unserem Doppelzimmer Deluxe, ausgestattet mit luxuriöser Einrichtung und atemberaubendem Blick auf die Natur.</p>
-                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&zimmer=Doppelzimmer Deluxe" class="btn btn-primary">Jetzt buchen</a>            </div>
+                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&guests=<?php echo $guests; ?>&zimmer=Doppelzimmer Deluxe" class="btn btn-primary">Jetzt buchen</a>            </div>
         </div>
 
         <!-- Doppelzimmer Standard -->
@@ -121,7 +145,7 @@ session_start();
             <div class="card-body" style="flex: 1; padding-left: 20px;">
                 <h5 class="card-title">Doppelzimmer Standard</h5>
                 <p class="card-text">Unser Doppelzimmer Standard bietet Ihnen eine gemütliche Atmosphäre und ist ideal für Reisende, die eine praktische und komfortable Unterkunft suchen.</p>
-                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&zimmer=Doppelzimmer Standard" class="btn btn-primary">Jetzt buchen</a>            </div>
+                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&guests=<?php echo $guests; ?>&zimmer=Doppelzimmer Standard" class="btn btn-primary">Jetzt buchen</a>            </div>
         </div>
 
         <!-- Einzelzimmer Premium -->
@@ -149,7 +173,7 @@ session_start();
             <div class="card-body" style="flex: 1; padding-left: 20px;">
                 <h5 class="card-title">Einzelzimmer Premium</h5>
                 <p class="card-text">Ein stilvoll eingerichtetes Einzelzimmer mit gemütlichem Einzelbett und einem funktionalen Schreibtisch. Die moderne Ausstattung ist ideal für eine Auszeit nach einem langen Tag.</p>
-                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&zimmer=Einzelzimmer Premium" class="btn btn-primary">Jetzt buchen</a>            </div>
+                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&guests=<?php echo $guests; ?>&zimmer=Einzelzimmer Premium" class="btn btn-primary">Jetzt buchen</a>            </div>
         </div>
 
         <!-- Einzelzimmer Deluxe -->
@@ -177,7 +201,7 @@ session_start();
             <div class="card-body" style="flex: 1; padding-left: 20px;">
                 <h5 class="card-title">Einzelzimmer Deluxe</h5>
                 <p class="card-text">Helles, modern eingerichtetes Zimmer mit komfortablem Einzelbett, Schreibtisch und eigenem Bad. Perfekt für Geschäftsreisende und Alleinreisende, die Ruhe und Funktionalität schätzen.</p>
-                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&zimmer=Einzelzimmer Deluxe" class="btn btn-primary">Jetzt buchen</a>            </div>
+                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&guests=<?php echo $guests; ?>&zimmer=Einzelzimmer Deluxe" class="btn btn-primary">Jetzt buchen</a>            </div>
         </div>
 
         <!-- Einzelzimmer Standard -->
@@ -198,13 +222,14 @@ session_start();
                     </a>
                     <a class="carousel-control-next" href="#carouselExampleIndicators5" role="button" data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&zimmer=Einzelzimmer Standard" class="btn btn-primary">Jetzt buchen</a>                    </a>
+                        <span class="visually-hidden">Next</span>
+                    </a>
                 </div>
             </div>
             <div class="card-body" style="flex: 1; padding-left: 20px;">
                 <h5 class="card-title">Einzelzimmer Standard</h5>
                 <p class="card-text">Charmantes Zimmer mit bequemer Ausstattung, einem Einzelbett und stilvollem Dekor. Mit Flachbild-TV, Schreibtisch und eigenem Bad ideal für entspannte Aufenthalte.</p>
-                <a href="Einzelzimmer2.php" class="btn btn-primary">Jetzt buchen</a>
+                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&guests=<?php echo $guests; ?>&zimmer=Einzelzimmer Standard" class="btn btn-primary">Jetzt buchen</a>
             </div>
         </div>
     </div>
