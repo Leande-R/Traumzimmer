@@ -109,6 +109,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <button type="submit" class="btn btn-primary">Aktualisieren</button>
     </form>
+
+    <!-- New segment: Meine Reservierungen -->
+    <div class="mt-4">
+        <h3>Meine Reservierungen</h3>
+        <p>Sehen Sie sich Ihre vergangenen und zukünftigen Reservierungen an:</p>
+        <a href="myReservations.php" class="btn btn-link">Zu meinen Reservierungen</a>
+    </div>
 </div>
 
 <!-- Footer -->
