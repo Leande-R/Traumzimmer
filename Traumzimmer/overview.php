@@ -25,84 +25,24 @@ session_start();
 <section class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <form action="overview.php" method="get" class="row g-3 align-items-end">
-                <!-- Dropdown für Anzahl der Gäste -->
-                <div class="col-md-4">
-                    <label for="guestsDropdown" class="form-label">Anzahl der Gäste</label>
-                    <select name="guests" id="guestsDropdown" class="form-select">
-                        <option value="1" selected>1 Gast</option>
-                        <option value="2">2 Gäste</option>
-                        <option value="3">3 Gäste</option>
-                        <option value="4">4 Gäste</option>
-                        <option value="5">5 Gäste</option>
-                    </select>
-                </div>
+            <?php
+                // Anreisedatum und Abreisedatum aus GET-Parametern lesen
+                $checkin = isset($_GET['checkin']) ? htmlspecialchars($_GET['checkin']) : 'nicht angegeben';
+                $checkout = isset($_GET['checkout']) ? htmlspecialchars($_GET['checkout']) : 'nicht angegeben';
+            ?>
 
-                <!-- Anreisedatum -->
-                <div class="col-md-3">
-                    <label for="checkin" class="form-label">Anreisedatum</label>
-                    <input type="date" name="checkin" id="checkin" class="form-control" required>
-                </div>
-
-                <!-- Abreisedatum -->
-                <div class="col-md-3">
-                    <label for="checkout" class="form-label">Abreisedatum</label>
-                    <input type="date" name="checkout" id="checkout" class="form-control" required>
-                </div>
-
-                <script>
-                    // Funktion, um das heutige Datum im Format YYYY-MM-DD zu erhalten
-                    function getTodayDate() {
-                        const today = new Date();
-                        const year = today.getFullYear();
-                        const month = String(today.getMonth() + 1).padStart(2, '0'); // Monate von 0-11, daher +1
-                        const day = String(today.getDate()).padStart(2, '0');
-                        return `${year}-${month}-${day}`;
-                    }
-
-                    // Funktion, um ein Datum um einen Tag zu erhöhen
-                    function addDaysToDate(date, days) {
-                        const result = new Date(date);
-                        result.setDate(result.getDate() + days);
-                        const year = result.getFullYear();
-                        const month = String(result.getMonth() + 1).padStart(2, '0');
-                        const day = String(result.getDate()).padStart(2, '0');
-                        return `${year}-${month}-${day}`;
-                    }
-
-                    // Setze das Attribut "min" auf das heutige Datum
-                    const todayDate = getTodayDate();
-                    document.getElementById('checkin').setAttribute('min', todayDate);
-
-                    // Event Listener für Anreisedatum
-                    document.getElementById('checkin').addEventListener('change', function () {
-                        const checkinDate = this.value;
-                        if (checkinDate) {
-                            // Setze das Abreisedatum auf mindestens einen Tag nach dem Anreisedatum
-                            const minCheckoutDate = addDaysToDate(checkinDate, 1);
-                            const checkoutField = document.getElementById('checkout');
-                            checkoutField.setAttribute('min', minCheckoutDate);
-                            if (checkoutField.value && checkoutField.value <= checkinDate) {
-                                checkoutField.value = ''; // Leert das Abreisedatum, wenn es ungültig ist
-                            }
-                        }
-                    });
-                </script>
-
-                <!-- Buchen-Button -->
-                <div class="col-md-2 text-center">
-                    <button type="submit" class="btn btn-primary w-100">buchen</button>
-                </div>
-            </form>
+            <!-- Titel -->
+            <h1 class="mb-4">Verfügbare Zimmer für den Zeitraum: <?php echo "$checkin bis $checkout"; ?></h1>
         </div>
     </div>
 </section>
-<!-- Carousel für Doppelzimmer -->
+
+<!-- Zimmer Carousels und Beschreibungen untereinander -->
 <div class="container my-5">
     <div class="row">
         <!-- Doppelzimmer Premium -->
-        <div class="col-md-4">
-            <div class="card mb-4">
+        <div class="col-md-12 mb-4 d-flex align-items-center">
+            <div class="carousel-container" style="flex: 1;">
                 <div id="carouselExampleIndicators1" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
@@ -121,16 +61,16 @@ session_start();
                         <span class="visually-hidden">Next</span>
                     </a>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">Doppelzimmer Premium</h5>
-                    <p class="card-text">Erleben Sie höchsten Wohnkomfort in unserem Doppelzimmer Premium, das stilvolle Akzente und moderne Annehmlichkeiten für einen unvergesslichen Aufenthalt bietet.</p>
-                    <a href="DoppelZimmerPremium.php" class="btn btn-primary">Jetzt buchen</a>
-                </div>
             </div>
+            <div class="card-body" style="flex: 1; padding-left: 20px;">
+                <h5 class="card-title">Doppelzimmer Premium</h5>
+                <p class="card-text">Erleben Sie höchsten Wohnkomfort in unserem Doppelzimmer Premium, das stilvolle Akzente und moderne Annehmlichkeiten für einen unvergesslichen Aufenthalt bietet.</p>
+                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&zimmer=Doppelzimmer Premium" class="btn btn-primary">Jetzt buchen</a>            </div>
         </div>
-        <!-- Doppelzimmer Deluxe -->                
-        <div class="col-md-4">
-            <div class="card mb-4">
+
+        <!-- Doppelzimmer Deluxe -->
+        <div class="col-md-12 mb-4 d-flex align-items-center">
+            <div class="carousel-container" style="flex: 1;">
                 <div id="carouselExampleIndicators2" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
@@ -149,16 +89,16 @@ session_start();
                         <span class="visually-hidden">Next</span>
                     </a>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">Doppelzimmer Deluxe</h5>
-                    <p class="card-text">Genießen Sie ultimativen Komfort in unserem Doppelzimmer Deluxe, ausgestattet mit luxuriöser Einrichtung und atemberaubendem Blick auf die Natur.</p>
-                    <a href="DoppelZimmerDeluxe.php" class="btn btn-primary">Jetzt buchen</a>
-                </div>
             </div>
+            <div class="card-body" style="flex: 1; padding-left: 20px;">
+                <h5 class="card-title">Doppelzimmer Deluxe</h5>
+                <p class="card-text">Genießen Sie ultimativen Komfort in unserem Doppelzimmer Deluxe, ausgestattet mit luxuriöser Einrichtung und atemberaubendem Blick auf die Natur.</p>
+                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&zimmer=Doppelzimmer Deluxe" class="btn btn-primary">Jetzt buchen</a>            </div>
         </div>
-        <!-- Doppelzimmer Standard -->            
-        <div class="col-md-4">
-            <div class="card mb-4">
+
+        <!-- Doppelzimmer Standard -->
+        <div class="col-md-12 mb-4 d-flex align-items-center">
+            <div class="carousel-container" style="flex: 1;">
                 <div id="carouselExampleIndicators3" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
@@ -177,22 +117,16 @@ session_start();
                         <span class="visually-hidden">Next</span>
                     </a>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">Doppelzimmer Standard</h5>
-                    <p class="card-text">Unser Doppelzimmer Standard bietet Ihnen eine gemütliche Atmosphäre und ist ideal für Reisende, die eine praktische und komfortable Unterkunft suchen.</p>
-                    <a href="DoppelZimmerStandard.php" class="btn btn-primary">Jetzt buchen</a>
-                </div>
             </div>
+            <div class="card-body" style="flex: 1; padding-left: 20px;">
+                <h5 class="card-title">Doppelzimmer Standard</h5>
+                <p class="card-text">Unser Doppelzimmer Standard bietet Ihnen eine gemütliche Atmosphäre und ist ideal für Reisende, die eine praktische und komfortable Unterkunft suchen.</p>
+                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&zimmer=Doppelzimmer Standard" class="btn btn-primary">Jetzt buchen</a>            </div>
         </div>
-    </div>
-</div>
 
-<!-- Neue Zeile mit Carouselen für Einzelzimmer -->
-<div class="container my-5">
-    <div class="row">
         <!-- Einzelzimmer Premium -->
-        <div class="col-md-4">
-            <div class="card mb-4">
+        <div class="col-md-12 mb-4 d-flex align-items-center">
+            <div class="carousel-container" style="flex: 1;">
                 <div id="carouselExampleIndicators6" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
@@ -211,17 +145,16 @@ session_start();
                         <span class="visually-hidden">Next</span>
                     </a>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">Einzelzimmer Premium</h5>
-                    <p class="card-text">Ein stilvoll eingerichtetes Einzelzimmer mit gemütlichem Einzelbett und einem funktionalen Schreibtisch. Die moderne Ausstattung ist ideal für eine Auszeit nach einem langen Tag.</p>
-                    <a href="Einzelzimmer3.php" class="btn btn-primary">Jetzt buchen</a>
-                </div>
             </div>
+            <div class="card-body" style="flex: 1; padding-left: 20px;">
+                <h5 class="card-title">Einzelzimmer Premium</h5>
+                <p class="card-text">Ein stilvoll eingerichtetes Einzelzimmer mit gemütlichem Einzelbett und einem funktionalen Schreibtisch. Die moderne Ausstattung ist ideal für eine Auszeit nach einem langen Tag.</p>
+                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&zimmer=Einzelzimmer Premium" class="btn btn-primary">Jetzt buchen</a>            </div>
         </div>
 
         <!-- Einzelzimmer Deluxe -->
-        <div class="col-md-4">
-            <div class="card mb-4">
+        <div class="col-md-12 mb-4 d-flex align-items-center">
+            <div class="carousel-container" style="flex: 1;">
                 <div id="carouselExampleIndicators4" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
@@ -240,17 +173,16 @@ session_start();
                         <span class="visually-hidden">Next</span>
                     </a>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">Einzelzimmer Deluxe</h5>
-                    <p class="card-text">Helles, modern eingerichtetes Zimmer mit komfortablem Einzelbett, Schreibtisch und eigenem Bad. Perfekt für Geschäftsreisende und Alleinreisende, die Ruhe und Funktionalität schätzen.</p>
-                    <a href="Einzelzimmer1.php" class="btn btn-primary">Jetzt buchen</a>
-                </div>
             </div>
+            <div class="card-body" style="flex: 1; padding-left: 20px;">
+                <h5 class="card-title">Einzelzimmer Deluxe</h5>
+                <p class="card-text">Helles, modern eingerichtetes Zimmer mit komfortablem Einzelbett, Schreibtisch und eigenem Bad. Perfekt für Geschäftsreisende und Alleinreisende, die Ruhe und Funktionalität schätzen.</p>
+                <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&zimmer=Einzelzimmer Deluxe" class="btn btn-primary">Jetzt buchen</a>            </div>
         </div>
 
         <!-- Einzelzimmer Standard -->
-        <div class="col-md-4">
-            <div class="card mb-4">
+        <div class="col-md-12 mb-4 d-flex align-items-center">
+            <div class="carousel-container" style="flex: 1;">
                 <div id="carouselExampleIndicators5" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
@@ -266,22 +198,23 @@ session_start();
                     </a>
                     <a class="carousel-control-next" href="#carouselExampleIndicators5" role="button" data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </a>
+                        <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&zimmer=Einzelzimmer Standard" class="btn btn-primary">Jetzt buchen</a>                    </a>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">Einzelzimmer Standard</h5>
-                    <p class="card-text">Charmantes Zimmer mit bequemer Ausstattung, einem Einzelbett und stilvollem Dekor. Mit Flachbild-TV, Schreibtisch und eigenem Bad ideal für entspannte Aufenthalte.</p>
-                    <a href="Einzelzimmer2.php" class="btn btn-primary">Jetzt buchen</a>
-                </div>
+            </div>
+            <div class="card-body" style="flex: 1; padding-left: 20px;">
+                <h5 class="card-title">Einzelzimmer Standard</h5>
+                <p class="card-text">Charmantes Zimmer mit bequemer Ausstattung, einem Einzelbett und stilvollem Dekor. Mit Flachbild-TV, Schreibtisch und eigenem Bad ideal für entspannte Aufenthalte.</p>
+                <a href="Einzelzimmer2.php" class="btn btn-primary">Jetzt buchen</a>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-3">
+    <p>&copy; 2024 Traumzimmer. Alle Rechte vorbehalten.</p>
+</footer>
 
-<?php include 'footer.php'; ?>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JTq9ObeU1iYqCzzZmcNzPqL1cqk7kdsLO5cp8XMVo9O64eOuH0uZ8LtAc7YPFw7x" crossorigin="anonymous"></script>
 </body>
 </html>
