@@ -184,10 +184,10 @@ session_start();
                 <div id="carouselExampleIndicators5" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img class="d-block w-100" src="images/Einzelzimmer2_1.jpg" alt="Slide 1">
+                            <img class="d-block w-100" src="images/Einzelzimmer2_3.jpg" alt="Slide 1">
                         </div>
                         <div class="carousel-item">
-                            <img class="d-block w-100" src="images/Einzelzimmer2_2.jpg" alt="Slide 2">
+                            <img class="d-block w-100" src="images/Einzelzimmer2_4.jpg" alt="Slide 2">
                         </div>
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleIndicators5" role="button" data-bs-slide="prev">
@@ -212,7 +212,7 @@ session_start();
                 <div id="carouselExampleIndicators6" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img class="d-block w-100" src="images/Einzelzimmer3_1.jpg" alt="Slide 1">
+                            <img class="d-block w-100" src="images/Einzelzimmer3_3.jpg" alt="Slide 1">
                         </div>
                         <div class="carousel-item">
                             <img class="d-block w-100" src="images/Einzelzimmer3_2.jpg" alt="Slide 2">
