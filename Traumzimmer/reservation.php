@@ -1,27 +1,5 @@
 <?php
 session_start();
-// Dummy user data
-$users = [
-    'admin' => [
-        'password' => password_hash('1234', PASSWORD_DEFAULT),
-        'vorname' => 'Max',
-        'nachname' => 'Mustermann',
-        'email' => 'max@mustermann.de'
-    ],
-    'user1' => [
-        'password' => password_hash('passwort', PASSWORD_DEFAULT),
-        'vorname' => 'Eva',
-        'nachname' => 'Schmidt',
-        'email' => 'eva@schmidt.de'
-    ]
-];
-    // php error will be found in next sprint :( 
-// Dummy room data
-$rooms = [
-    ['id' => 1, 'name' => 'Doppel Zimmer Premium', 'description' => 'Höchster Wohnkomfort.'],
-    ['id' => 2, 'name' => 'Doppel Zimmer Deluxe', 'description' => 'Luxuriöse Einrichtung.'],
-    ['id' => 3, 'name' => 'Einzelzimmer 1', 'description' => 'Gemütliches Einzelzimmer.']
-];
 
 // Check if the user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
@@ -34,13 +12,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $guests = $_POST['guests'];
     $checkin = $_POST['checkin'];
     $checkout = $_POST['checkout'];
+    $zimmer = $_POST['zimmer'];
+    $breakfast = $_POST['breakfast'];
+    $parking = $_POST['parking'];
+    $pets = $_POST['pets'];
 
     echo "<h2>Vielen Dank für Ihre Reservierung!</h2>";
     echo "<p>Anzahl der Gäste: $guests</p>";
     echo "<p>Anreisedatum: $checkin</p>";
     echo "<p>Abreisedatum: $checkout</p>";
+    echo "<p>Zimmer: $zimmer</p>";
+    echo "<p>Frühstück: " . ($breakfast === 'yes' ? 'Ja' : 'Nein') . "</p>";
+    echo "<p>Parkplatz: " . ($parking === 'yes' ? 'Ja' : 'Nein') . "</p>";
+    echo "<p>Mit Haustier: " . ($pets === 'yes' ? 'Ja' : 'Nein') . "</p>";
     exit;
 }
+
+// Handle GET parameters
+$guests = isset($_GET['guests']) ? htmlspecialchars($_GET['guests']) : '';
+$checkin = isset($_GET['checkin']) ? htmlspecialchars($_GET['checkin']) : '';
+$checkout = isset($_GET['checkout']) ? htmlspecialchars($_GET['checkout']) : '';
+$zimmer = isset($_GET['zimmer']) ? htmlspecialchars($_GET['zimmer']) : '';
+
+// Predefined room options
+$rooms = [
+    ['name' => 'Doppelzimmer Premium'],
+    ['name' => 'Doppelzimmer Deluxe'],
+    ['name' => 'Doppelzimmer Standard'],
+    ['name' => 'Einzelzimmer Premium'],
+    ['name' => 'Einzelzimmer Deluxe'],
+    ['name' => 'Einzelzimmer Standard']
+];
 ?>
 
 <!doctype html>
@@ -52,10 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         html, body {
-            height: 100%; /* Ensure the page takes up the full height */
-            margin: 0;   /* Remove default margins */
+            height: 100%;
+            margin: 0;
             display: flex;
-            flex-direction: column; /* Arrange elements vertically */
+            flex-direction: column;
         }
         body {
             background: url('images/Hotel4_3.jpg') no-repeat center center fixed;
@@ -63,8 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #fff;
         }
         .content-wrapper {
-            flex: 1; /* Take up remaining space */
-            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent overlay for readability */
+            flex: 1;
+            background-color: rgba(0, 0, 0, 0.7);
             padding: 20px;
             border-radius: 10px;
             margin-top: 20px;
@@ -86,15 +88,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form method="post" action="reservation.php">
         <div class="mb-3">
             <label for="guests" class="form-label">Anzahl der Gäste:</label>
-            <input type="number" id="guests" name="guests" class="form-control" required>
+            <input type="number" id="guests" name="guests" class="form-control" required value="<?= htmlspecialchars($guests) ?>">
         </div>
         <div class="mb-3">
             <label for="checkin" class="form-label">Anreisedatum:</label>
-            <input type="date" id="checkin" name="checkin" class="form-control" required>
+            <input type="date" id="checkin" name="checkin" class="form-control" required value="<?= htmlspecialchars($checkin) ?>">
         </div>
         <div class="mb-3">
             <label for="checkout" class="form-label">Abreisedatum:</label>
-            <input type="date" id="checkout" name="checkout" class="form-control" required>
+            <input type="date" id="checkout" name="checkout" class="form-control" required value="<?= htmlspecialchars($checkout) ?>">
+        </div>
+        <div class="mb-3">
+            <label for="zimmer" class="form-label">Zimmer:</label>
+            <select id="zimmer" name="zimmer" class="form-control" required>
+                <?php foreach ($rooms as $room): ?>
+                    <option value="<?= htmlspecialchars($room['name']) ?>" <?= $room['name'] === $zimmer ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($room['name']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Wünschen Sie unser exquisites Frühstück in Anspruch zu nehmen?</label>
+            <div>
+                <input type="radio" id="breakfast_yes" name="breakfast" value="yes" required>
+                <label for="breakfast_yes">Ja</label>
+                <input type="radio" id="breakfast_no" name="breakfast" value="no" required>
+                <label for="breakfast_no">Nein</label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Benötigen Sie einen Parkplatz?</label>
+            <div>
+                <input type="radio" id="parking_yes" name="parking" value="yes" required>
+                <label for="parking_yes">Ja</label>
+                <input type="radio" id="parking_no" name="parking" value="no" required>
+                <label for="parking_no">Nein</label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Reisen Sie mit Ihrem geliebten vierbeinigem Freund?</label>
+            <div>
+                <input type="radio" id="pets_yes" name="pets" value="yes" required>
+                <label for="pets_yes">Ja</label>
+                <input type="radio" id="pets_no" name="pets" value="no" required>
+                <label for="pets_no">Nein</label>
+            </div>
         </div>
         <button type="submit" class="btn btn-primary w-100">Reservieren</button>
     </form>
