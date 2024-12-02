@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Success message
             $success = "Registrierung erfolgreich! Bitte melden Sie sich an.";
-            header("Location: LogIn.php"); // Redirect to login page
+            header("Location: login.php"); // Redirect to login page
             exit;
         }
     }
@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 
     <!-- Registration Form -->
-    <form action="Registration.php" method="POST">
+    <form action="registration.php" method="POST">
         <div class="form-group">
             <label for="anrede">Anrede</label>
             <select class="form-control" id="anrede" name="anrede" required>
