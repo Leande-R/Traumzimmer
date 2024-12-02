@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="mt-4">
         <h3>Meine Reservierungen</h3>
         <p>Sehen Sie sich Ihre vergangenen und zukünftigen Reservierungen an:</p>
-        <a href="myReservations.php" class="btn btn-link">Zu meinen Reservierungen</a>
+        <a href="myreservations.php" class="btn btn-link">Zu meinen Reservierungen</a>
     </div>
 </div>
 

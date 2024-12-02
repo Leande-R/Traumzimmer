@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <!-- Login-Formular -->
-        <form action="LogIn.php" method="POST" class="mx-auto" style="max-width: 400px;">
+        <form action="login.php" method="POST" class="mx-auto" style="max-width: 400px;">
             <div class="mb-3">
                 <label for="username" class="form-label">Benutzername:</label>
                 <input type="text" id="username" name="username" class="form-control" required>
@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
 
         <!-- Registrierung-Link -->
-        <p class="text-center mt-3">Noch nicht registriert? <a href="Registration.php">Hier registrieren</a>.</p>
+        <p class="text-center mt-3">Noch nicht registriert? <a href="registration.php">Hier registrieren</a>.</p>
     </div>
 
     <!-- Footer -->
