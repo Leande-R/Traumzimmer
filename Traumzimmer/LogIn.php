@@ -52,12 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             padding-top: 100px; /* Platz für die Navbar */
             background-color: #f8f9fa;
         }
-        .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
         .img-container {
             text-align: center;
         }
@@ -66,23 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             height: auto;
             margin-bottom: 20px;
         }
-        footer {
-            background-color: #343a40;
-            color: #fff;
-            padding: 10px 0;
-            text-align: center;
-        }
+     
     </style>
 </head>
+ <!-- Navbar -->
+ <?php include 'navbar.php'; ?>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <img src="images/LogoBreit.png" alt="Logo" style="height: 60px;">
-            </a>
-        </div>
-    </nav>
+   
 
     <!-- Bild unter der Navbar -->
     <div class="img-container container">
