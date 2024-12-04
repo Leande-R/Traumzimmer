@@ -6,19 +6,18 @@
     <title>Traumzimmer FAQ</title>
     <!-- Include Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Include Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
         }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-            justify-content: center;
-        }
+        
         nav ul {
             list-style-type: none;
             padding: 0;
@@ -38,17 +37,31 @@
             cursor: pointer;
             color: #007BFF;
         }
+        header {
+            text-align: center;
+            padding: 50px 0; /* Reduziert den Abstand nach dem Header */
+        }
+        footer {
+            background-color: #333; /* Dunkle Hintergrundfarbe */
+            color: #fff; /* Weiße Schrift */
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+        }
+        footer a {
+            color: #ffc107; /* Linkfarbe im Footer */
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <div style="padding: 100px;"></div>
-        <h1>Traumzimmer FAQ</h1>
-        <div style="padding: 500px;"></div>
-        
-        <?php include 'navbar.php'; ?> <!-- Include the navbar -->
 
+    <?php include 'navbar.php'; ?> <!-- Include the navbar -->
+
+    <header>
+        <h1>Traumzimmer FAQ</h1>
     </header>
+
     <div class="container">
         <section class="faq-section">
             <h2>Häufige Fragen</h2>
@@ -85,12 +98,9 @@
         </section>
     </div>
 
-    <!-- Footer -->
-    <?php include 'footer.php'; ?> 
 
-    <!-- Include Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+        <!-- Footer -->
+    <?php include 'footer.php'; ?>
+
 </html>
