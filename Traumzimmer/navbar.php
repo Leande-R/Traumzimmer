@@ -32,7 +32,7 @@ if (session_status() == PHP_SESSION_NONE) {
                     </li>
                     <!-- Logout -->
                     <li class="nav-item">
-                        <a class="nav-link" href="LogOut.php">Logout</a>
+                        <a class="nav-link" href="logout.php">Logout</a>
                     </li>
                 <?php else: ?>
                     <!-- Login-Button für nicht eingeloggte Benutzer -->
@@ -62,7 +62,7 @@ if (session_status() == PHP_SESSION_NONE) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="LogIn.php" method="POST">
+                <form action="login.php" method="POST">
                     <div class="mb-3">
                         <label for="username" class="form-label">Benutzername:</label>
                         <input type="text" id="username" name="username" class="form-control" required>
@@ -73,7 +73,7 @@ if (session_status() == PHP_SESSION_NONE) {
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Login</button>
                 </form>
-                <p class="text-center mt-3">Noch keinen Account? <a href="Registration.php">Hier registrieren</a>.</p>
+                <p class="text-center mt-3">Noch keinen Account? <a href="registration.php">Hier registrieren</a>.</p>
             </div>
         </div>
     </div>

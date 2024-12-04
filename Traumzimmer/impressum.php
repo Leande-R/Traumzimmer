@@ -53,10 +53,43 @@
             font-size: 1.1rem;
             color: #495057;
         }
-    </style>
-</head>
+    </style
 <?php include 'navbar.php'; ?>
-
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <div class="container">
+      <a class="navbar-brand" href="#">
+          <img src="images/LogoBreit.png" alt="Logo" style="height: 60px;">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Deutsch
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                      <li><a class="dropdown-item" href="#" onclick="setLanguage('Englisch')">Englisch</a></li>
+                  </ul>
+              </li>
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Euro €
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                      <li><a class="dropdown-item" href="#" onclick="setCurrency">US-Dollar $</a></li>
+                  </ul>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="login.php">
+                      Einloggen <i class="fas fa-sign-in-alt"></i> <!-- Icon für Einloggen -->
+                  </a>
+              </li>
+          </ul>
+      </div>
+  </div>
+</nav>
 <body>
 
 <div class="container mt-5">
