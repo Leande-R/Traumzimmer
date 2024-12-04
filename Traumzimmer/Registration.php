@@ -3,6 +3,10 @@ session_start(); // Start session
 $error = ''; // Initialize error message
 $success = ''; // Initialize success message
 
+// Initialize the users array in the session if not already set
+if (!isset($_SESSION['users'])) {
+    $_SESSION['users'] = [];
+}
 // Dummy user data array with added attributes
 $users = [
     'admin' => [
