@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
@@ -16,6 +18,11 @@ session_start();
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+                <!-- News-Button -->
+                <li class="nav-item">
+                    <a class="nav-link" href="News.php">News</a>
+
+
                 <?php if (isset($_SESSION['username'])): ?>
                     <!-- Benutzername anzeigen -->
                     <li class="nav-item">
@@ -39,6 +46,12 @@ session_start();
         </div>
     </div>
 </nav>
+
+<style>
+    body {
+        padding-top: 80px; /* Platz schaffen, damit Inhalte nicht hinter der Navbar verschwinden */
+    }
+</style>
 
 <!-- Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">

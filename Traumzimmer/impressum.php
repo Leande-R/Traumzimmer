@@ -15,7 +15,6 @@
             background-color: #f8f9fa;
         }
         .container {
-            background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             padding: 30px;
@@ -23,7 +22,7 @@
         h1 {
             margin-bottom: 20px;
             font-size: 2rem;
-            color: 495057;
+            color: #495057;
         }
         h2 {
             margin-top: 20px;
@@ -54,8 +53,8 @@
             font-size: 1.1rem;
             color: #495057;
         }
-    </style>
-</head>
+    </style
+<?php include 'navbar.php'; ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <div class="container">
       <a class="navbar-brand" href="#">
@@ -91,7 +90,6 @@
       </div>
   </div>
 </nav>
-
 <body>
 
 <div class="container mt-5">

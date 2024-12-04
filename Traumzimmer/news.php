@@ -5,26 +5,11 @@ ini_set('display_errors', 1);
 
 // Include Navbar and Footer
 include 'navbar.php';
-include 'footer.php';
 
 // Verzeichnisse für hochgeladene Bilder und Thumbnails
 define('UPLOAD_DIR', __DIR__ . '/news/uploads/');
 define('THUMBNAIL_DIR', __DIR__ . '/news/thumbnails/');
 define('THUMBNAIL_WIDTH', 200); // Breite des Thumbnails in Pixeln
-
-// Statische News-Beiträge (Hotel-Bezug)
-$newsPosts = [
-    [
-        'title' => 'Neues Wellness-Angebot',
-        'content' => 'Unser Hotel bietet ab sofort ein erweitertes Wellness-Angebot mit Sauna, Dampfbad und einem neuen Infinity-Pool. Entspannen Sie sich in luxuriöser Umgebung!',
-        'image' => 'default1.jpg'
-    ],
-    [
-        'title' => 'Kulinarische Highlights im Restaurant',
-        'content' => 'Freuen Sie sich auf ein exklusives 5-Gänge-Menü von unserem neuen Küchenchef. Erleben Sie Gourmet-Genuss in unserem neu renovierten Hotelrestaurant.',
-        'image' => 'default2.jpg'
-    ],
-];
 
 // Funktion für das Erstellen eines Thumbnails
 function createThumbnail($filePath, $destinationPath, $thumbWidth) {
@@ -66,8 +51,8 @@ function createThumbnail($filePath, $destinationPath, $thumbWidth) {
     return true;
 }
 
-// Bild-Upload verarbeiten
-if ($_SESSION['username'] === 'admin' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+// Bild-Upload verarbeiten (nur wenn der Benutzer eingeloggt ist und Admin-Rechte hat)
+if (isset($_SESSION['username']) && $_SESSION['username'] === 'admin' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'] ?? '';
     $content = $_POST['content'] ?? '';
     $uploadFile = $_FILES['image'] ?? null;
@@ -111,27 +96,58 @@ if ($_SESSION['username'] === 'admin' && $_SERVER['REQUEST_METHOD'] === 'POST') 
     <title>News-Beiträge</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding top: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .card-img-top {
+            width: 100%; /* Bild passt sich der Breite der Karte an */
+            height: 250px; /* Fixierte Höhe */
+            object-fit: cover; /* Beibehaltung der Proportionen */
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 500px; /* Breite des Scrollbereichs begrenzen */
+            margin: 0 auto; /* Zentriert auf der Seite */
+            overflow-y: auto; /* Ermöglicht vertikales Scrollen */
+        }
+    </style>
 </head>
 <body>
 <div class="container py-5">
     <h1 class="mb-4 text-center">News-Beiträge</h1>
-    <div class="row">
-        <?php foreach ($newsPosts as $post): ?>
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <?php if (!empty($post['image'])): ?>
-                        <img src="news/thumbnails/<?= htmlspecialchars($post['image']) ?>" class="card-img-top" alt="News Bild">
-                    <?php endif; ?>
-                    <div class="card-body">
-                        <h5 class="card-title"><?= htmlspecialchars($post['title']) ?></h5>
-                        <p class="card-text"><?= nl2br(htmlspecialchars($post['content'])) ?></p>
-                    </div>
+
+    <!-- Anzeige der statischen News -->
+    <div class="row flex-column">
+        <!-- Erster Beitrag -->
+        <div class="col-12">
+            <div class="card">
+                <img src="images/Pool.jpg" class="card-img-top" alt="Wellness-Angebot">
+                <div class="card-body">
+                    <h5 class="card-title">Neues Wellness-Angebot</h5>
+                    <p class="card-text">Unser Hotel bietet ab sofort ein erweitertes Wellness-Angebot mit Sauna, Dampfbad und einem neuen Infinity-Pool. Entspannen Sie sich in luxuriöser Umgebung!</p>
                 </div>
             </div>
-        <?php endforeach; ?>
+        </div>
+
+        <!-- Zweiter Beitrag -->
+        <div class="col-12">
+            <div class="card">
+                <img src="images/Food.jpg" class="card-img-top" alt="Kulinarische Highlights">
+                <div class="card-body">
+                    <h5 class="card-title">Kulinarische Highlights im Restaurant</h5>
+                    <p class="card-text">Freuen Sie sich auf ein exklusives 5-Gänge-Menü von unserem neuen Küchenchef. Erleben Sie Gourmet-Genuss in unserem neu renovierten Hotelrestaurant.</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <?php if ($_SESSION['username'] === 'admin'): ?>
+    <?php if (isset($_SESSION['username']) && $_SESSION['username'] === 'admin'): ?>
         <div class="mt-5">
             <h2>Neuen News Beitrag hochladen</h2>
             <form action="news.php" method="POST" enctype="multipart/form-data" class="mt-3">
@@ -155,4 +171,5 @@ if ($_SESSION['username'] === 'admin' && $_SERVER['REQUEST_METHOD'] === 'POST') 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+<?php include 'footer.php'; ?>
 </html>
