@@ -7,26 +7,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit;
 }
 
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $guests = $_POST['guests'];
-    $checkin = $_POST['checkin'];
-    $checkout = $_POST['checkout'];
-    $zimmer = $_POST['zimmer'];
-    $breakfast = $_POST['breakfast'];
-    $parking = $_POST['parking'];
-    $pets = $_POST['pets'];
 
-    echo "<h2>Vielen Dank für Ihre Reservierung!</h2>";
-    echo "<p>Anzahl der Gäste: $guests</p>";
-    echo "<p>Anreisedatum: $checkin</p>";
-    echo "<p>Abreisedatum: $checkout</p>";
-    echo "<p>Zimmer: $zimmer</p>";
-    echo "<p>Frühstück: " . ($breakfast === 'yes' ? 'Ja' : 'Nein') . "</p>";
-    echo "<p>Parkplatz: " . ($parking === 'yes' ? 'Ja' : 'Nein') . "</p>";
-    echo "<p>Mit Haustier: " . ($pets === 'yes' ? 'Ja' : 'Nein') . "</p>";
-    exit;
-}
 
 // Handle GET parameters
 $guests = isset($_GET['guests']) ? htmlspecialchars($_GET['guests']) : '';
@@ -85,7 +66,7 @@ $rooms = [
 
 <div class="container content-wrapper">
     <h1 class="text-center">Reservierung</h1>
-    <form method="post" action="reservation.php">
+    <form method="post" action="reservationconfirmation.php">
         <div class="mb-3">
             <label for="guests" class="form-label">Anzahl der Gäste:</label>
             <input type="number" id="guests" name="guests" class="form-control" required value="<?= htmlspecialchars($guests) ?>">
