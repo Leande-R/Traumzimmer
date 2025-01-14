@@ -1,29 +1,14 @@
 <?php
 session_start(); // Start session
-$error = ''; // Initialize error message
-$success = ''; // Initialize success message
+require 'dbaccess.php'; // Include database connection settings
+$error = ''; 
+$success = ''; 
 
 // Initialize the users array in the session if not already set
 if (!isset($_SESSION['users'])) {
     $_SESSION['users'] = [];
 }
-// Dummy user data array with added attributes
-$users = [
-    'admin' => [
-        'anrede' => 'Herr',
-        'vorname' => 'Max',
-        'nachname' => 'Mustermann',
-        'email' => 'max.mustermann@example.com',
-        'password' => password_hash('1234', PASSWORD_DEFAULT) // Example hashed password
-    ],
-    'user1' => [
-        'anrede' => 'Frau',
-        'vorname' => 'Eva',
-        'nachname' => 'Schmidt',
-        'email' => 'eva.schmidt@example.com',
-        'password' => password_hash('passwort', PASSWORD_DEFAULT) // Example hashed password
-    ]
-];
+
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -35,26 +20,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
     $confirmPassword = $_POST['confirmPassword'];
 
-    // Validate that the password and confirm password match
-    if ($password !== $confirmPassword) {
-        $error = "Die Passwörter stimmen nicht überein.";
-    } else {
-        // Check if the username or email already exists in the session data
-        if (array_key_exists($username, $_SESSION['users'])) {
-            $error = "Benutzername existiert bereits.";
+   // Eingaben prüfen
+   if ($password !== $confirmPassword) {
+    $error = "Die Passwörter stimmen nicht überein.";
+} else {
+    try {
+                // Prüfen, ob die E-Mail-Adresse oder der Benutzername bereits existieren
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE mailadresse = :mailadresse OR benutzername = :benutzername");
+        $stmt->execute([':mailadresse' => $mailadresse, ':benutzername' => $benutzername]);
+        $exists = $stmt->fetchColumn();
+
+        if ($exists) {
+            $error = "E-Mail-Adresse oder Benutzername existiert bereits.";
         } else {
-            // Hash the password for storage
+            // Passwort hashen
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            // Simulate saving the user by adding them to the session (dummy storage)
-            $_SESSION['users'][$username] = $hashedPassword;
+            // Benutzer in die Datenbank einfügen
+            $stmt = $pdo->prepare("INSERT INTO users (mailadresse, anrede, vorname, nachname, benutzername, passwort, admin) 
+                                   VALUES (:mailadresse, :anrede, :vorname, :nachname, :benutzername, :passwort, :admin)");
+            $stmt->execute([
+                ':mailadresse' => $email,
+                ':anrede' => $anrede,
+                ':vorname' => $vorname,
+                ':nachname' => $nachname,
+                ':benutzername' => $username,
+                ':passwort' => $hashedPassword,
+                ':admin' => FALSE // Standardwert, kein Admin
+            ]);
 
-            // Success message
             $success = "Registrierung erfolgreich! Bitte melden Sie sich an.";
-            header("Location: login.php"); // Redirect to login page
+            header("Location: login.php");
             exit;
         }
+    } catch (PDOException $e) {
+        $error = "Fehler bei der Datenbankverbindung: " . $e->getMessage();
     }
+}
 }
 ?>
 
@@ -95,9 +97,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="anrede">Anrede</label>
             <select class="form-control" id="anrede" name="anrede" required>
                 <option value="">Wählen Sie...</option>
-                <option value="Herr">Herr</option>
-                <option value="Frau">Frau</option>
-                <option value="Keine Angabe">Keine Angabe</option>
+                <option value="0">Herr</option>
+                <option value="1">Frau</option>
+                <option value="2">Keine Angabe</option>
             </select>
         </div>
         <div class="form-group">
