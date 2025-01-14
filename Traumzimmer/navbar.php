@@ -2,6 +2,46 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+require 'dbaccess.php';
+
+$error = ''; // Fehlermeldung
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email']); // 
+    $password = $_POST['password'];
+
+    if (!empty($email) && !empty($password)) {
+        try {
+            // Benutzerdaten anhand der E-Mail aus der Datenbank holen
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE mailadresse = :email");
+            $stmt->execute([':email' => $email]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Überprüfen, ob der Benutzer existiert und das Passwort korrekt ist
+            if ($user && password_verify($password, $user['passwort'])) {
+                // Benutzer erfolgreich eingeloggt, Session starten und Benutzerinfo speichern
+                $_SESSION['username'] = $user['benutzername'];
+                $_SESSION['vorname'] = $user['vorname'];
+                $_SESSION['nachname'] = $user['nachname'];
+                $_SESSION['email'] = $user['mailadresse'];
+                $_SESSION['loggedin'] = true;
+
+               
+                header('Location: index.php');
+                exit; 
+            } else {
+                $error = 'Ungültige E-Mail-Adresse oder Passwort.';
+            }
+        } catch (PDOException $e) {
+            $error = 'Fehler bei der Datenbankverbindung: ' . $e->getMessage();
+        }
+    } else {
+        $error = 'Bitte geben Sie sowohl E-Mail-Adresse als auch Passwort ein.';
+    }
+}
+
+
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
@@ -27,7 +67,7 @@ if (session_status() == PHP_SESSION_NONE) {
                     <!-- Benutzername anzeigen -->
                     <li class="nav-item">
                         <a class="nav-link" href="User.php">
-                            <?= htmlspecialchars($_SESSION['username']); ?>
+                        Willkommen, <?= htmlspecialchars($_SESSION['username']); ?>
                         </a>
                     </li>
                     <!-- Logout -->
@@ -62,10 +102,18 @@ if (session_status() == PHP_SESSION_NONE) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <!-- Fehleranzeige -->
+                <?php if ($error): ?>
+                    <div class="alert alert-danger text-center" role="alert">
+                        <?= htmlspecialchars($error) ?>
+                    </div>
+                <?php endif; ?>
+                
+                <!-- Login-Formular -->
                 <form action="login.php" method="POST">
                     <div class="mb-3">
-                        <label for="username" class="form-label">Benutzername:</label>
-                        <input type="text" id="username" name="username" class="form-control" required>
+                        <label for="email" class="form-label">E-Mail-Adresse:</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Passwort:</label>

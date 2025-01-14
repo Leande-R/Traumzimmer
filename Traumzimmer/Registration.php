@@ -4,10 +4,6 @@ require 'dbaccess.php'; // Include database connection settings
 $error = ''; 
 $success = ''; 
 
-// Initialize the users array in the session if not already set
-if (!isset($_SESSION['users'])) {
-    $_SESSION['users'] = [];
-}
 
 
 // Handle form submission
@@ -47,10 +43,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':benutzername' => $username,
                 ':passwort' => $hashedPassword,
                 ':admin' => FALSE // Standardwert, kein Admin
-            ]);
+            ]); 
+            
+             // Direkt-Login nach erfolgreicher Registrierung:
+             $_SESSION['username'] = $username;
+             $_SESSION['vorname'] = $vorname;
+             $_SESSION['nachname'] = $nachname;
+             $_SESSION['email'] = $email;
+             $_SESSION['loggedin'] = true; // Benutzer als eingeloggt markieren
 
-            $success = "Registrierung erfolgreich! Bitte melden Sie sich an.";
-            header("Location: login.php");
+            $success = "Registrierung und Login erfolgreich! Sie sind nun eingeloggt.";
+            header("Location: index.php");
             exit;
         }
     } catch (PDOException $e) {
