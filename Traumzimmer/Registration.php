@@ -16,50 +16,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
     $confirmPassword = $_POST['confirmPassword'];
 
-   // Eingaben prüfen
-   if ($password !== $confirmPassword) {
-    $error = "Die Passwörter stimmen nicht überein.";
-} else {
-    try {
-                // Prüfen, ob die E-Mail-Adresse oder der Benutzername bereits existieren
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE mailadresse = :mailadresse OR benutzername = :benutzername");
-        $stmt->execute([':mailadresse' => $mailadresse, ':benutzername' => $benutzername]);
-        $exists = $stmt->fetchColumn();
+    // Eingaben prüfen
+    if ($password !== $confirmPassword) {
+        $error = "Die Passwörter stimmen nicht überein.";
+    } else {
+        try {
+            // Prüfen, ob die E-Mail-Adresse oder der Benutzername bereits existieren
+            $stmt = $mysqli->prepare("SELECT COUNT(*) AS count FROM users WHERE mailadresse = ? OR benutzername = ?");
+            $stmt->bind_param('ss', $email, $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $data = $result->fetch_assoc();
 
-        if ($exists) {
-            $error = "E-Mail-Adresse oder Benutzername existiert bereits.";
-        } else {
-            // Passwort hashen
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            if ($data['count'] > 0) {
+                // Wenn Benutzername oder E-Mail schon vorhanden sind
+                $error = "E-Mail-Adresse oder Benutzername existiert bereits.";
+            } else {
+                // Passwort hashen
+                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            // Benutzer in die Datenbank einfügen
-            $stmt = $pdo->prepare("INSERT INTO users (mailadresse, anrede, vorname, nachname, benutzername, passwort, admin) 
-                                   VALUES (:mailadresse, :anrede, :vorname, :nachname, :benutzername, :passwort, :admin)");
-            $stmt->execute([
-                ':mailadresse' => $email,
-                ':anrede' => $anrede,
-                ':vorname' => $vorname,
-                ':nachname' => $nachname,
-                ':benutzername' => $username,
-                ':passwort' => $hashedPassword,
-                ':admin' => FALSE // Standardwert, kein Admin
-            ]); 
-            
-             // Direkt-Login nach erfolgreicher Registrierung:
-             $_SESSION['username'] = $username;
-             $_SESSION['vorname'] = $vorname;
-             $_SESSION['nachname'] = $nachname;
-             $_SESSION['email'] = $email;
-             $_SESSION['loggedin'] = true; // Benutzer als eingeloggt markieren
+                // Benutzer in die Datenbank einfügen
+                $stmt = $mysqli->prepare("INSERT INTO users (mailadresse, anrede, vorname, nachname, benutzername, passwort, admin) 
+                                          VALUES (?, ?, ?, ?, ?, ?, ?)");
+                if ($stmt) {
+                    $admin = 0; // Standardwert, kein Admin
+                    $stmt->bind_param('sissssi', $email, $anrede, $vorname, $nachname, $username, $hashedPassword, $admin);
 
-            $success = "Registrierung und Login erfolgreich! Sie sind nun eingeloggt.";
-            header("Location: index.php");
-            exit;
+                    // Ausführung und Prüfung, ob erfolgreich
+                    if ($stmt->execute()) {
+                        // Direkt-Login nach erfolgreicher Registrierung:
+                        $_SESSION['username'] = $username;
+                        $_SESSION['vorname'] = $vorname;
+                        $_SESSION['nachname'] = $nachname;
+                        $_SESSION['email'] = $email;
+                        $_SESSION['loggedin'] = true; // Benutzer als eingeloggt markieren
+
+                        $success = "Registrierung und Login erfolgreich! Sie sind nun eingeloggt.";
+                        header("Location: index.php");
+                        exit;
+                    } else {
+                        // Fehler bei der Datenbankausführung
+                        $error = "Fehler beim Hinzufügen des Benutzers.";
+                    }
+                } else {
+                    // Fehler bei der Vorbereitungsphase
+                    $error = "Fehler bei der Datenbankverbindung.";
+                }
+            }
+        } catch (Exception $e) {
+            // Fehlerausgabe für alle anderen Ausnahmen (Datenbankfehler etc.)
+            $error = "Fehler: " . $e->getMessage();
         }
-    } catch (PDOException $e) {
-        $error = "Fehler bei der Datenbankverbindung: " . $e->getMessage();
     }
-}
 }
 ?>
 

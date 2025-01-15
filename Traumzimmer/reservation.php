@@ -1,5 +1,6 @@
 <?php
 session_start();
+require 'dbaccess.php';
 
 // Check if the user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
@@ -9,21 +10,50 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
 
 
+// Angenommene POST-Parameter: $zimmer (z.B. 'Doppelzimmer Premium')
+// Holen wir uns die verfügbaren Zimmer der angegebenen Kategorie:
+$zimmerbezeichnung = $_GET['zimmer']; // z.B. 'Doppelzimmer Premium'
+
+// SQL Query, um freie Zimmer der Kategorie abzurufen
+$sql = "
+    SELECT zimmerid
+    FROM zimmer
+    WHERE bezeichnung = :zimmerbezeichnung
+    AND zimmerid NOT IN (
+        SELECT zimmerid
+        FROM reservierungen
+        WHERE (anreisedatum BETWEEN :checkin AND :checkout) 
+        OR (abreisedatum BETWEEN :checkin AND :checkout)
+        OR (anreisedatum <= :checkin AND abreisedatum >= :checkout)
+    )
+    ORDER BY zimmerid ASC"; // Zimmer nach zimmerid aufsteigend sortieren
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute([
+    ':checkin' => $checkin,
+    ':checkout' => $checkout
+]);
+
+// Holen der freien Zimmer
+$freieZimmer = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Prüfen, wie viele Zimmer verfügbar sind:
+if (count($freieZimmer) > 0) {
+    // Falls mindestens ein Zimmer frei ist, nimm das Zimmer mit der kleineren zimmerid
+    $zimmerid = $freieZimmer[0]['zimmerid']; // Kleineres Zimmer wird durch die SQL-Sortierung gewährleistet
+    // Weiterverarbeitung: Reservierung vornehmen
+
+    
+} else {
+    echo "Leider sind keine Zimmer verfügbar für den gewählten Zeitraum.";
+}
+
+
 // Handle GET parameters
 $guests = isset($_GET['guests']) ? htmlspecialchars($_GET['guests']) : '';
 $checkin = isset($_GET['checkin']) ? htmlspecialchars($_GET['checkin']) : '';
 $checkout = isset($_GET['checkout']) ? htmlspecialchars($_GET['checkout']) : '';
-$zimmer = isset($_GET['zimmer']) ? htmlspecialchars($_GET['zimmer']) : '';
 
-// Predefined room options
-$rooms = [
-    ['name' => 'Doppelzimmer Premium'],
-    ['name' => 'Doppelzimmer Deluxe'],
-    ['name' => 'Doppelzimmer Standard'],
-    ['name' => 'Einzelzimmer Premium'],
-    ['name' => 'Einzelzimmer Deluxe'],
-    ['name' => 'Einzelzimmer Standard']
-];
 ?>
 
 <!doctype html>
@@ -69,25 +99,26 @@ $rooms = [
     <form method="post" action="reservationconfirmation.php">
         <div class="mb-3">
             <label for="guests" class="form-label">Anzahl der Gäste:</label>
-            <input type="number" id="guests" name="guests" class="form-control" required value="<?= htmlspecialchars($guests) ?>">
+            <!-- Nur den Wert der Gäste anzeigen -->
+            <p class="form-control-static"><?= htmlspecialchars($guests) ?></p>
         </div>
+        
         <div class="mb-3">
-            <label for="checkin" class="form-label">Anreisedatum:</label>
-            <input type="date" id="checkin" name="checkin" class="form-control" required value="<?= htmlspecialchars($checkin) ?>">
-        </div>
-        <div class="mb-3">
-            <label for="checkout" class="form-label">Abreisedatum:</label>
-            <input type="date" id="checkout" name="checkout" class="form-control" required value="<?= htmlspecialchars($checkout) ?>">
-        </div>
+        <label for="checkin" class="form-label">Anreisedatum:</label>
+        <!-- Anreisedatum im Format DD.MM.YYYY anzeigen -->
+        <p class="form-control-static"><?= date('d.m.Y', strtotime($checkin)) ?></p>
+    </div>
+    
+    <div class="mb-3">
+        <label for="checkout" class="form-label">Abreisedatum:</label>
+        <!-- Abreisedatum im Format DD.MM.YYYY anzeigen -->
+        <p class="form-control-static"><?= date('d.m.Y', strtotime($checkout)) ?></p>
+    </div>
+        
         <div class="mb-3">
             <label for="zimmer" class="form-label">Zimmer:</label>
-            <select id="zimmer" name="zimmer" class="form-control" required>
-                <?php foreach ($rooms as $room): ?>
-                    <option value="<?= htmlspecialchars($room['name']) ?>" <?= $room['name'] === $zimmer ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($room['name']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+            <!-- Den Zimmertyp als Text anzeigen -->
+            <p class="form-control-static"><?= htmlspecialchars($zimmer) ?></p>
         </div>
         <div class="mb-3">
             <label class="form-label">Wünschen Sie unser exquisites Frühstück in Anspruch zu nehmen?</label>

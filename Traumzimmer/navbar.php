@@ -7,41 +7,51 @@ require 'dbaccess.php';
 $error = ''; // Fehlermeldung
 
 
+
+
+// Überprüfung der Anmeldedaten
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email']); // 
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
 
     if (!empty($email) && !empty($password)) {
-        try {
-            // Benutzerdaten anhand der E-Mail aus der Datenbank holen
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE mailadresse = :email");
-            $stmt->execute([':email' => $email]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Vorbereitung der SQL-Anweisung mit MySQLi
+        $stmt = $mysqli->prepare("SELECT * FROM users WHERE mailadresse = ?");
+        if ($stmt) {
+            $stmt->bind_param("s", $email); // Platzhalter für die E-Mail-Adresse
+            $stmt->execute(); // Abfrage ausführen
+            $result = $stmt->get_result();
 
-            // Überprüfen, ob der Benutzer existiert und das Passwort korrekt ist
-            if ($user && password_verify($password, $user['passwort'])) {
-                // Benutzer erfolgreich eingeloggt, Session starten und Benutzerinfo speichern
-                $_SESSION['username'] = $user['benutzername'];
-                $_SESSION['vorname'] = $user['vorname'];
-                $_SESSION['nachname'] = $user['nachname'];
-                $_SESSION['email'] = $user['mailadresse'];
-                $_SESSION['loggedin'] = true;
+            if ($result->num_rows > 0) {
+                $user = $result->fetch_assoc();
 
-               
-                header('Location: index.php');
-                exit; 
+                // Passwortprüfung
+                if (password_verify($password, $user['passwort'])) {
+                    // Login erfolgreich: Daten in der Session speichern
+                    $_SESSION['username'] = $user['benutzername'];
+                    $_SESSION['vorname'] = $user['vorname'];
+                    $_SESSION['nachname'] = $user['nachname'];
+                    $_SESSION['email'] = $user['mailadresse'];
+                    $_SESSION['loggedin'] = true;
+
+                    // Weiterleitung zur Startseite
+                    header('Location: index.php');
+                    exit;
+                } else {
+                    $error = 'Ungültige E-Mail-Adresse oder Passwort.';
+                }
             } else {
                 $error = 'Ungültige E-Mail-Adresse oder Passwort.';
             }
-        } catch (PDOException $e) {
-            $error = 'Fehler bei der Datenbankverbindung: ' . $e->getMessage();
+
+            $stmt->close(); // Statement schließen
+        } else {
+            $error = 'Fehler bei der Datenbankabfrage: ' . $mysqli->error;
         }
     } else {
         $error = 'Bitte geben Sie sowohl E-Mail-Adresse als auch Passwort ein.';
     }
 }
-
-
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">

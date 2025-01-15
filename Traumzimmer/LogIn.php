@@ -10,12 +10,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
 
     if (!empty($email) && !empty($password)) {
-        try {
-            // Benutzer aus der Datenbank basierend auf der E-Mail-Adresse abrufen
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE mailadresse = :mailadresse");
-            $stmt->execute([':mailadresse' => $email]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = $mysqli->prepare("SELECT * FROM users WHERE mailadresse = ?");
+        if ($stmt) {
+            $stmt->bind_param("s", $email); // 's' für String
+            $stmt->execute();
 
+            $result = $stmt->get_result();
+            $user = $result->fetch_assoc();
+
+            // Überprüfung des Passworts
             if ($user && password_verify($password, $user['passwort'])) {
                 // Login erfolgreich: Daten in der Session speichern
                 $_SESSION['username'] = $user['benutzername'];
@@ -30,14 +33,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $error = 'Ungültige E-Mail-Adresse oder Passwort.';
             }
-        } catch (PDOException $e) {
-            $error = "Fehler bei der Datenbankverbindung: " . $e->getMessage();
+
+            $stmt->close();
+        } else {
+            $error = 'Datenbankfehler: Das Prepared Statement konnte nicht erstellt werden.';
         }
     } else {
         $error = 'Bitte E-Mail-Adresse und Passwort eingeben.';
     }
 }
+
+$mysqli->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="de">
