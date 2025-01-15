@@ -15,7 +15,7 @@ if (!isset($_SESSION['email'])) {
 
 $user_email = $_SESSION['email'];
 
-// Query, um alle Reservierungen und die Zimmerbezeichnung zu erhalten
+// Abfrage, um alle Reservierungen und die Zimmerbezeichnung zu erhalten
 $sql = "SELECT 
             r.reservationsid, 
             r.zimmerid, 

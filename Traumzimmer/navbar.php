@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <!-- Benutzername anzeigen -->
                     <li class="nav-item">
                         <a class="nav-link" href="User.php">
-                        Willkommen, <?= htmlspecialchars($_SESSION['username']); ?>
+                         <?= htmlspecialchars($_SESSION['username']); ?>
                         </a>
                     </li>
                     <!-- Logout -->
