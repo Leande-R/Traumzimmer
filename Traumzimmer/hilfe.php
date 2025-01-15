@@ -18,7 +18,7 @@
                 background-color: #f0f0f0;
                 display: flex;
                 flex-direction: column;
-                height: 100vh; /* Stellen Sie sicher, dass die Seite die gesamte Höhe des Viewports einnimmt */
+                height: 100vh; 
                 margin: 0;
             }
             header {

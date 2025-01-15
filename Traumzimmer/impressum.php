@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impressum</title>
     
-    <!-- Bootstrap CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         body {
             padding-top: 100px;
             padding-bottom: 100px;
-            background-color: #f8f9fa; /* Neutral background color */
+            background-color: #f8f9fa; 
         }
       
         h1, h2 {
