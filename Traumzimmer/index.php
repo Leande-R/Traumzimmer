@@ -32,9 +32,6 @@ session_start();
                     <select name="guests" id="guestsDropdown" class="form-select">
                         <option value="1" selected>1 Gast</option>
                         <option value="2">2 Gäste</option>
-                        <option value="3">3 Gäste</option>
-                        <option value="4">4 Gäste</option>
-                        <option value="5">5 Gäste</option>
                     </select>
                 </div>
 
