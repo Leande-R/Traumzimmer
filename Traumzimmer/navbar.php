@@ -11,7 +11,7 @@ $error = ''; // Fehlermeldung
 
 // Überprüfung der Anmeldedaten
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+  
 
     if (!empty($email) && !empty($password)) {
         // Vorbereitung der SQL-Anweisung mit MySQLi

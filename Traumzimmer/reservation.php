@@ -10,49 +10,120 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
 
 
-// Angenommene POST-Parameter: $zimmer (z.B. 'Doppelzimmer Premium')
-// Holen wir uns die verfügbaren Zimmer der angegebenen Kategorie:
 $zimmerbezeichnung = $_GET['zimmer']; // z.B. 'Doppelzimmer Premium'
+$guests = isset($_GET['guests']) ? intval($_GET['guests']) : 1;
+$checkin = isset($_GET['checkin']) ? htmlspecialchars($_GET['checkin']) : '';
+$checkout = isset($_GET['checkout']) ? htmlspecialchars($_GET['checkout']) : '';
 
-// SQL Query, um freie Zimmer der Kategorie abzurufen
+
+// SQL Abfrage, um freie Zimmer der Kategorie abzurufen
 $sql = "
-    SELECT zimmerid
+    SELECT zimmerid, preispronacht
     FROM zimmer
-    WHERE bezeichnung = :zimmerbezeichnung
+    WHERE bezeichnung = ? 
     AND zimmerid NOT IN (
         SELECT zimmerid
         FROM reservierungen
-        WHERE (anreisedatum BETWEEN :checkin AND :checkout) 
-        OR (abreisedatum BETWEEN :checkin AND :checkout)
-        OR (anreisedatum <= :checkin AND abreisedatum >= :checkout)
+        WHERE (anreisedatum BETWEEN ? AND ?)
+        OR (abreisedatum BETWEEN ? AND ?)
+        OR (anreisedatum <= ? AND abreisedatum >= ?)
     )
-    ORDER BY zimmerid ASC"; // Zimmer nach zimmerid aufsteigend sortieren
+    ORDER BY zimmerid ASC"; 
 
-$stmt = $pdo->prepare($sql);
-$stmt->execute([
-    ':checkin' => $checkin,
-    ':checkout' => $checkout
-]);
+$stmt = $mysqli->prepare($sql);
+
+
+$stmt->bind_param('sssssss', $zimmerbezeichnung, $checkin, $checkout, $checkin, $checkout, $checkin, $checkout);
+$stmt->execute();
+$result = $stmt->get_result();
 
 // Holen der freien Zimmer
-$freieZimmer = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$freieZimmer = $result->fetch_all(MYSQLI_ASSOC);
 
-// Prüfen, wie viele Zimmer verfügbar sind:
+// Prüfen, ob Zimmer verfügbar sind:
 if (count($freieZimmer) > 0) {
-    // Falls mindestens ein Zimmer frei ist, nimm das Zimmer mit der kleineren zimmerid
-    $zimmerid = $freieZimmer[0]['zimmerid']; // Kleineres Zimmer wird durch die SQL-Sortierung gewährleistet
-    // Weiterverarbeitung: Reservierung vornehmen
+    // Wenn mindestens ein Zimmer verfügbar ist, wählen wir das Zimmer mit der kleineren ZimmerID
+    $zimmerid = $freieZimmer[0]['zimmerid'];  // Kleineres Zimmer durch SQL-Sortierung
+    $zimmerPreis = $freieZimmer[0]['preispronacht'];  // Preis pro Nacht
+} else {
+    $sql = "
+    SELECT zimmerid, preispronacht
+    FROM zimmer
+    WHERE bezeichnung = ? 
+    AND zimmerid NOT IN (
+        SELECT zimmerid
+        FROM reservierungen
+        WHERE (
+            (anreisedatum BETWEEN ? AND ?)
+            OR (abreisedatum BETWEEN ? AND ?)
+            OR (anreisedatum <= ? AND abreisedatum >= ?)
+        )
+    )
+    ORDER BY zimmerid ASC";
 
-    
+$stmt = $mysqli->prepare($sql);
+
+// Bind-Parameter: 's' für string (zimmerbezeichnung), 's' für datumswerte (checkin, checkout) 
+// Stellen Sie sicher, dass die Variablen korrekt sind und den erwarteten Datentypen entsprechen
+$stmt->bind_param('sssssss', $zimmerbezeichnung, $checkin, $checkout, $checkin, $checkout, $checkin, $checkout);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Holen der freien Zimmer
+$freieZimmer = $result->fetch_all(MYSQLI_ASSOC);
+
+// Prüfen, ob Zimmer verfügbar sind:
+if (count($freieZimmer) > 0) {
+    // Wenn mindestens ein Zimmer verfügbar ist, wählen wir das Zimmer mit der kleineren ZimmerID
+    $zimmerid = $freieZimmer[0]['zimmerid'];  // Kleineres Zimmer durch SQL-Sortierung
+    $zimmerPreis = $freieZimmer[0]['preispronacht'];  // Preis pro Nacht
 } else {
     echo "Leider sind keine Zimmer verfügbar für den gewählten Zeitraum.";
+    exit;
+}
+    exit;
 }
 
 
-// Handle GET parameters
-$guests = isset($_GET['guests']) ? htmlspecialchars($_GET['guests']) : '';
-$checkin = isset($_GET['checkin']) ? htmlspecialchars($_GET['checkin']) : '';
-$checkout = isset($_GET['checkout']) ? htmlspecialchars($_GET['checkout']) : '';
+
+// Wenn das Formular über POST abgeschickt wurde (Reservierung durchführen)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Zusatzinformationen vom Formular:
+    $breakfast = isset($_POST['breakfast']) && $_POST['breakfast'] === 'yes' ? 1 : 0;
+    $parking = isset($_POST['parking']) && $_POST['parking'] === 'yes' ? 1 : 0;
+    $pets = isset($_POST['pets']) && $_POST['pets'] === 'yes' ? 1 : 0;
+
+    // Zusatzkosten für die Addons:
+    $breakfastPrice = $breakfast ? 45 : 0; // Frühstückskosten: 45€
+    $parkingPrice = $parking ? 30 : 0;     // Parkplatzkosten: 30€
+    $petsPrice = $pets ? 15 : 0;           // Haustierkosten: 15€
+
+    // Berechnung der Dauer des Aufenthalts (in Nächten)
+    $nights = (strtotime($checkout) - strtotime($checkin)) / 86400;  // 86400 Sekunden in einem Tag
+    $totalRoomPrice = $zimmerPreis * $nights;  // Gesamtkosten für das Zimmer
+    
+    // Gesamtpreis berechnen
+    $totalPrice = $totalRoomPrice + $breakfastPrice + $parkingPrice + $petsPrice;
+
+    // Reservierung in die Datenbank einfügen
+    $reservierungsdatum = date('Y-m-d H:i:s');
+    $mailadresse = $_SESSION['email']; // Benutzer-E-Mail aus der Session
+    $stmt = $mysqli->prepare("INSERT INTO reservierungen (mailadresse, zimmerid, gaeste, anreisedatum, abreisedatum, reservierungsdatum, fruehstueck, parkplatz, haustier, gesamtpreis, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $status = 0; 
+    
+    $stmt->bind_param('siissssiiis', $mailadresse, $zimmerid, $guests, $checkin, $checkout, $reservierungsdatum, $breakfast, $parking, $pets, $totalPrice, $status);
+    if ($stmt->execute()) {
+        $reservationId = $mysqli->insert_id;
+
+        $reservationSuccess = true; // Erfolgreiche Reservierung
+        header("Location: reservationconfirmation.php?reservation_id=" . $reservationId);
+        exit;
+    } else {
+        echo "Fehler bei der Reservierung. Bitte versuchen Sie es später noch einmal.";
+    }
+}
+
+
 
 ?>
 
@@ -96,7 +167,15 @@ $checkout = isset($_GET['checkout']) ? htmlspecialchars($_GET['checkout']) : '';
 
 <div class="container content-wrapper">
     <h1 class="text-center">Reservierung</h1>
-    <form method="post" action="reservationconfirmation.php">
+
+    <?php if (isset($reservationSuccess) && $reservationSuccess): ?>
+        <div class="alert alert-success" role="alert">
+            Ihre Reservierung war erfolgreich! Sie erhalten in Kürze eine Bestätigungs-E-Mail.
+        </div>
+    <?php endif; ?>
+
+
+    <form method="post" >
         <div class="mb-3">
             <label for="guests" class="form-label">Anzahl der Gäste:</label>
             <!-- Nur den Wert der Gäste anzeigen -->
@@ -118,10 +197,10 @@ $checkout = isset($_GET['checkout']) ? htmlspecialchars($_GET['checkout']) : '';
         <div class="mb-3">
             <label for="zimmer" class="form-label">Zimmer:</label>
             <!-- Den Zimmertyp als Text anzeigen -->
-            <p class="form-control-static"><?= htmlspecialchars($zimmer) ?></p>
-        </div>
+            <p class="form-control-static"><?= htmlspecialchars($zimmerbezeichnung) ?></p>
+            </div>
         <div class="mb-3">
-            <label class="form-label">Wünschen Sie unser exquisites Frühstück in Anspruch zu nehmen?</label>
+            <label class="form-label">Wünschen Sie unser exquisites Frühstück in Anspruch zu nehmen? +45€</label>
             <div>
                 <input type="radio" id="breakfast_yes" name="breakfast" value="yes" required>
                 <label for="breakfast_yes">Ja</label>
@@ -130,7 +209,7 @@ $checkout = isset($_GET['checkout']) ? htmlspecialchars($_GET['checkout']) : '';
             </div>
         </div>
         <div class="mb-3">
-            <label class="form-label">Benötigen Sie einen Parkplatz?</label>
+            <label class="form-label">Benötigen Sie einen Parkplatz? +30€</label>
             <div>
                 <input type="radio" id="parking_yes" name="parking" value="yes" required>
                 <label for="parking_yes">Ja</label>
@@ -139,7 +218,7 @@ $checkout = isset($_GET['checkout']) ? htmlspecialchars($_GET['checkout']) : '';
             </div>
         </div>
         <div class="mb-3">
-            <label class="form-label">Reisen Sie mit Ihrem geliebten vierbeinigem Freund?</label>
+            <label class="form-label">Reisen Sie mit Ihrem geliebten vierbeinigem Freund? +15€</label>
             <div>
                 <input type="radio" id="pets_yes" name="pets" value="yes" required>
                 <label for="pets_yes">Ja</label>
