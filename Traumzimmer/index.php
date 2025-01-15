@@ -120,8 +120,7 @@ session_start();
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Doppelzimmer Premium</h5>
-                    <p class="card-text">Erleben Sie höchsten Wohnkomfort in unserem Doppelzimmer Premium, das stilvolle Akzente und moderne Annehmlichkeiten für einen unvergesslichen Aufenthalt bietet.</p>
-                    <a href="DoppelZimmerPremium.php" class="btn btn-primary">Jetzt buchen</a>
+                    <p class="card-text">Erleben Sie höchsten Wohnkomfort in unserem Doppelzimmer Premium, das stilvolle Akzente und moderne Annehmlichkeiten für einen unvergesslichen Aufenthalt bietet.<br>(300€ pro Nacht)</p>
                 </div>
             </div>
         </div>
@@ -148,8 +147,7 @@ session_start();
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Doppelzimmer Deluxe</h5>
-                    <p class="card-text">Genießen Sie ultimativen Komfort in unserem Doppelzimmer Deluxe, ausgestattet mit luxuriöser Einrichtung und atemberaubendem Blick auf die Natur.</p>
-                    <a href="DoppelZimmerDeluxe.php" class="btn btn-primary">Jetzt buchen</a>
+                    <p class="card-text">Genießen Sie ultimativen Komfort in unserem Doppelzimmer Deluxe, ausgestattet mit luxuriöser Einrichtung und atemberaubendem Blick auf die Natur.<br>(250€ pro Nacht)</p>
                 </div>
             </div>
         </div>
@@ -176,8 +174,7 @@ session_start();
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Doppelzimmer Standard</h5>
-                    <p class="card-text">Unser Doppelzimmer Standard bietet Ihnen eine gemütliche Atmosphäre und ist ideal für Reisende, die eine praktische und komfortable Unterkunft suchen.</p>
-                    <a href="DoppelZimmerStandard.php" class="btn btn-primary">Jetzt buchen</a>
+                    <p class="card-text">Unser Doppelzimmer Standard bietet Ihnen eine gemütliche Atmosphäre und ist ideal für Reisende, die eine praktische und komfortable Unterkunft suchen.<br>(200€ pro Nacht)</p>
                 </div>
             </div>
         </div>
@@ -210,8 +207,7 @@ session_start();
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Einzelzimmer Premium</h5>
-                    <p class="card-text">Ein stilvoll eingerichtetes Einzelzimmer mit gemütlichem Einzelbett und einem funktionalen Schreibtisch. Die moderne Ausstattung ist ideal für eine Auszeit nach einem langen Tag.</p>
-                    <a href="Einzelzimmer3.php" class="btn btn-primary">Jetzt buchen</a>
+                    <p class="card-text">Ein stilvoll eingerichtetes Einzelzimmer mit gemütlichem Einzelbett und einem funktionalen Schreibtisch. Die moderne Ausstattung ist ideal für eine Auszeit nach einem langen Tag.<br>(250€ pro Nacht)</p>
                 </div>
             </div>
         </div>
@@ -239,8 +235,7 @@ session_start();
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Einzelzimmer Deluxe</h5>
-                    <p class="card-text">Helles, modern eingerichtetes Zimmer mit komfortablem Einzelbett, Schreibtisch und eigenem Bad. Perfekt für Geschäftsreisende und Alleinreisende, die Ruhe und Funktionalität schätzen.</p>
-                    <a href="Einzelzimmer1.php" class="btn btn-primary">Jetzt buchen</a>
+                    <p class="card-text">Helles, modern eingerichtetes Zimmer mit komfortablem Einzelbett, Schreibtisch und eigenem Bad. Perfekt für Geschäftsreisende und Alleinreisende, die Ruhe und Funktionalität schätzen.<br>(200€ pro Nacht)</p>
                 </div>
             </div>
         </div>
@@ -268,8 +263,7 @@ session_start();
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Einzelzimmer Standard</h5>
-                    <p class="card-text">Charmantes Zimmer mit bequemer Ausstattung, einem Einzelbett und stilvollem Dekor. Mit Flachbild-TV, Schreibtisch und eigenem Bad ideal für entspannte Aufenthalte.</p>
-                    <a href="Einzelzimmer2.php" class="btn btn-primary">Jetzt buchen</a>
+                    <p class="card-text">Charmantes Zimmer mit bequemer Ausstattung, einem Einzelbett und stilvollem Dekor. Mit Flachbild-TV, Schreibtisch und eigenem Bad ideal für entspannte Aufenthalte.<br>(150€ pro Nacht)</p>
                 </div>
             </div>
         </div>
