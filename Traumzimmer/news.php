@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<?php include 'navbar.php'; 
+<?php  
 require 'dbaccess.php';
 
-session_start(); // Session starten
+include 'navbar.php';
 
-// Überprüfen, ob der Benutzer eingeloggt ist und ob er Admin ist
 $isAdmin = false;
-if (isset($_SESSION['user_email'])) {
-    $email = $mysqli->real_escape_string($_SESSION['user_email']);
+
+if (isset($_SESSION['email'])) {
+    $email = $mysqli->real_escape_string($_SESSION['email']);
     $query = "SELECT admin FROM users WHERE mailadresse = ?";
     if ($stmt = $mysqli->prepare($query)) {
         $stmt->bind_param('s', $email);
@@ -18,13 +18,10 @@ if (isset($_SESSION['user_email'])) {
             if ($row['admin'] == 1) {
                 $isAdmin = true;
             }
-        }
+        } 
         $stmt->close();
-    } else {
-        die("Fehler beim Vorbereiten der Abfrage: " . $mysqli->error);
-    }
-}
-
+    } 
+} 
 ?>
 <html lang="de">
 <head>
@@ -67,9 +64,40 @@ if (isset($_SESSION['user_email'])) {
     // Datenbankzugriff
     require 'dbaccess.php'; // Datenbankverbindung wird hier eingebunden
 
-    // Alle News-Beiträge aus der Datenbank abrufen
     
-
+    // Funktion, um die 3 letzten Newsbeiträge abzurufen
+    function displayLatestNews() {
+        global $mysqli;  // Zugriff auf die globale mysqli-Verbindung
+    
+        // SQL-Abfrage, um die letzten 3 Newsbeiträge abzurufen (sortiert nach dem Upload-Datum)
+        $sql = "SELECT titel, inhalt, bildpfad, uploaddatum FROM news ORDER BY uploaddatum DESC LIMIT 3";
+    
+        // Führen Sie die SQL-Abfrage aus
+        $result = $mysqli->query($sql);
+    
+        // Überprüfen, ob Ergebnisse vorhanden sind
+        if ($result->num_rows > 0) {
+            // Schleife durch die Ergebnisse und gebe sie aus
+            while ($row = $result->fetch_assoc()) {
+                echo '<h2>' . htmlspecialchars($row['titel']) . '</h2>';
+                echo '<p><strong>Veröffentlicht am:</strong> ' . date('d.m.Y H:i', strtotime($row['uploaddatum'])) . '</p>';
+                echo '<p>' . nl2br(htmlspecialchars($row['inhalt'])) . '</p>';
+                
+                // Bild anzeigen, falls vorhanden
+                if (!empty($row['bildpfad'])) {
+                    echo '<img src="' . htmlspecialchars($row['bildpfad']) . '" alt="Bild" style="max-width: 100%; height: auto;" />';
+                }
+    
+                echo '<hr>';  // Trenner zwischen den Beiträgen
+            }
+        } else {
+            echo 'Es sind keine Newsbeiträge verfügbar.';
+        }
+    }
+    
+    // Funktion aufrufen, um die Newsbeiträge anzuzeigen
+    displayLatestNews();
+    
     ?>
     <?php
     if ($isAdmin): ?>
@@ -90,48 +118,156 @@ if (isset($_SESSION['user_email'])) {
     </div>
 
 
-<?php
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $title = $mysqli->real_escape_string($_POST['title']);
-        $content = $mysqli->real_escape_string($_POST['content']);
-        $author = $mysqli->real_escape_string($_SESSION['user_email']);
-
-        $thumbnailName = basename($_FILES['thumbnail']['name']);
-        $thumbnailPath = 'Traumzimmer/news/thumbnails/' . $thumbnailName;
-
-        if (!is_dir('Traumzimmer/news/thumbnails')) {
-            if (!mkdir('Traumzimmer/news/thumbnails', 0755, true)) {
-                die("Das Verzeichnis 'Traumzimmer/news/thumbnails' konnte nicht erstellt werden.");
+    <?php
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $title = $mysqli->real_escape_string($_POST['title']);
+            $content = $mysqli->real_escape_string($_POST['content']);
+            $author = $mysqli->real_escape_string($_SESSION['email']);
+        
+            $thumbnailName = basename($_FILES['thumbnail']['name']);
+            $thumbnailPath = 'news/thumbnails/' . $thumbnailName;
+        
+            // Initialisierung von Variablen für die Nachrichten
+            $messages = [];
+        
+            // Zielverzeichnis erstellen, falls nicht vorhanden
+            if (!is_dir('news/uploads')) {
+                if (!mkdir('news/uploads', 0755, true)) {
+                    $messages[] = "Das Verzeichnis 'news/uploads' konnte nicht erstellt werden.";
+                }
             }
-        }
-
-        if ($_FILES['thumbnail']['error'] === UPLOAD_ERR_OK) {
-            if (move_uploaded_file($_FILES['thumbnail']['tmp_name'], $thumbnailPath)) {
-                echo "Das Thumbnail wurde erfolgreich hochgeladen.";
+        
+            // Datei hochladen
+            if ($_FILES['thumbnail']['error'] === UPLOAD_ERR_OK) {
+                $uploadPath = 'news/uploads/' . $thumbnailName;
+                if (move_uploaded_file($_FILES['thumbnail']['tmp_name'], $uploadPath)) {
+                    $messages[] = "Der Upload war erfolgreich.";
+                } else {
+                    $messages[] = "Fehler beim Verschieben der Datei.";
+                }
             } else {
-                die("Fehler beim Verschieben der Datei.");
+                $messages[] = "Fehler beim Hochladen der Datei: " . $_FILES['thumbnail']['error'];
             }
-        } else {
-            die("Fehler beim Hochladen der Datei: " . $_FILES['thumbnail']['error']);
+        
+            // Upload-Datum definieren
+            $uploadDate = date('Y-m-d H:i:s');
+        
+            // SQL-Query vorbereiten
+            $stmt = $mysqli->prepare("INSERT INTO news (autor, titel, inhalt, bildpfad, uploaddatum) VALUES (?, ?, ?, ?, ?)");
+            if (!$stmt) {
+                $messages[] = "Fehler beim Vorbereiten des Statements: " . $mysqli->error;
+            }
+        
+            // Parameter binden
+            $stmt->bind_param('sssss', $author, $title, $content, $thumbnailPath, $uploadDate);
+        
+            // Query ausführen
+            if ($stmt->execute()) {
+                $messages[] = "Der Newsbeitrag wurde erfolgreich erstellt.";
+            } else {
+                $messages[] = "Fehler beim Ausführen des Statements: " . $stmt->error;
+            }
+        
+            // Alle Nachrichten anzeigen
+            foreach ($messages as $message) {
+                echo $message . "<br>"; // Ausgabe der Meldungen untereinander
+            }
+        
+            // Funktion zum Kopieren und Skalieren des Bildes
+            function copyImage($sourceFolder, $destinationFolder, $imageName) {
+                // Pfad zum Quell- und Zielbild erstellen
+                $sourcePath = $sourceFolder . '/' . $imageName;
+                $destinationPath = $destinationFolder . '/' . $imageName;
+        
+                // Überprüfen, ob die Quelldatei existiert
+                if (!file_exists($sourcePath)) {
+                    echo "Fehler: Die Datei $imageName existiert nicht im Quellordner.";
+                    return false;
+                }
+        
+                // Zielordner erstellen, wenn er nicht existiert
+                if (!is_dir($destinationFolder)) {
+                    if (!mkdir($destinationFolder, 0755, true)) {
+                        echo "Fehler: Der Zielordner konnte nicht erstellt werden.";
+                        return false;
+                    }
+                }
+        
+                // Bildtyp ermitteln
+                $imageInfo = getimagesize($sourcePath);
+                $imageType = $imageInfo[2];
+        
+                // Bild je nach Typ laden
+                switch ($imageType) {
+                    case IMAGETYPE_JPEG:
+                        $sourceImage = @imagecreatefromjpeg($sourcePath);
+                        break;
+                    case IMAGETYPE_PNG:
+                        $sourceImage = @imagecreatefrompng($sourcePath);
+                        break;
+                    case IMAGETYPE_GIF:
+                        $sourceImage = @imagecreatefromgif($sourcePath);
+                        break;
+                    default:
+                        echo "Fehler: Unbekannter Bildtyp.";
+                        return false;
+                }
+        
+                // Zielgröße setzen (750px Breite, 500px Höhe)
+                $newWidth = 750;
+                $newHeight = 500;
+        
+                // Neue Bildgröße berechnen, um das Bild skalieren zu können
+                $sourceWidth = imagesx($sourceImage);
+                $sourceHeight = imagesy($sourceImage);
+        
+                // Berechnen des Skalierungsfaktors
+                $aspectRatio = $sourceWidth / $sourceHeight;
+        
+                if ($newWidth / $aspectRatio > $newHeight) {
+                    $newWidth = $newHeight * $aspectRatio;
+                } else {
+                    $newHeight = $newWidth / $aspectRatio;
+                }
+        
+                // Neues leeres Bild erstellen
+                $newImage = imagecreatetruecolor($newWidth, $newHeight);
+        
+                // Bild skalieren
+                imagecopyresampled($newImage, $sourceImage, 0, 0, 0, 0, $newWidth, $newHeight, $sourceWidth, $sourceHeight);
+        
+                // Bild in den Zielordner speichern
+                switch ($imageType) {
+                    case IMAGETYPE_JPEG:
+                        imagejpeg($newImage, $destinationPath, 90); // Qualität 90
+                        break;
+                    case IMAGETYPE_PNG:
+                        imagepng($newImage, $destinationPath);
+                        break;
+                    case IMAGETYPE_GIF:
+                        imagegif($newImage, $destinationPath);
+                        break;
+                }
+        
+                // Ressourcen freigeben
+                imagedestroy($sourceImage);
+                imagedestroy($newImage);
+        
+                // Die Datei wird erfolgreich kopiert
+                echo "Die Datei $imageName wurde erfolgreich zu den Thumbnails hinzugefügt.";
+                return true;
+            }
+        
+            // Nachdem das Bild hochgeladen wurde, kopieren und skalieren
+            copyImage('news/uploads', 'news/thumbnails', $thumbnailName);
+        
+            // Statement schließen
+            $stmt->close();
         }
+        ?>
+        
+        
 
-        $stmt = $mysqli->prepare("INSERT INTO news (autor, titel, inhalt, bildpfad, uploaddatum) VALUES (?, ?, ?, ?, ?)");
-        if (!$stmt) {
-            die("Fehler beim Vorbereiten des Statements: " . $mysqli->error);
-        }
-
-        $uploadDate = date('Y-m-d H:i:s');
-        $stmt->bind_param('sssss', $author, $title, $content, $thumbnailPath, $uploadDate);
-
-        if ($stmt->execute()) {
-            echo "Der Newsbeitrag wurde erfolgreich erstellt.";
-        } else {
-            die("Fehler beim Ausführen des Statements: " . $stmt->error);
-        }
-
-        $stmt->close();
-    }
-    ?>
 <?php endif; ?>
 
 </div>
