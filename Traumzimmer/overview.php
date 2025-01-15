@@ -116,7 +116,7 @@ $stmt->close();
             </div>
             <div class="card-body" style="flex: 1; padding-left: 20px;">
                 <h5 class="card-title">Doppelzimmer Premium</h5>
-                <p class="card-text">Erleben Sie höchsten Wohnkomfort in unserem Doppelzimmer Premium, das stilvolle Akzente und moderne Annehmlichkeiten für einen unvergesslichen Aufenthalt bietet. (300€ pro Nacht)</p>
+                <p class="card-text">Erleben Sie höchsten Wohnkomfort in unserem Doppelzimmer Premium, das stilvolle Akzente und moderne Annehmlichkeiten für einen unvergesslichen Aufenthalt bietet.<br>(300€ pro Nacht)</p>
                 <?php if (in_array(1, $freieZimmerIds) || in_array(2, $freieZimmerIds)): ?>
                         <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&guests=<?php echo $guests; ?>&zimmer=Doppelzimmer Premium" class="btn btn-primary">Jetzt buchen</a>
                     <?php else: ?>
@@ -149,7 +149,7 @@ $stmt->close();
             </div>
             <div class="card-body" style="flex: 1; padding-left: 20px;">
                 <h5 class="card-title">Doppelzimmer Deluxe</h5>
-                <p class="card-text">Genießen Sie ultimativen Komfort in unserem Doppelzimmer Deluxe, ausgestattet mit luxuriöser Einrichtung und atemberaubendem Blick auf die Natur. (250€ pro Nacht)</p>
+                <p class="card-text">Genießen Sie ultimativen Komfort in unserem Doppelzimmer Deluxe, ausgestattet mit luxuriöser Einrichtung und atemberaubendem Blick auf die Natur.<br>(250€ pro Nacht)</p>
                 <?php if (in_array(3, $freieZimmerIds) || in_array(4, $freieZimmerIds)): ?>
                         <a href="reservation.php ?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&guests=<?php echo $guests; ?>&zimmer=Doppelzimmer Deluxe" class= "btn btn-primary">Jetzt buchen</a>
                     <?php else: ?>
@@ -182,7 +182,7 @@ $stmt->close();
             </div>
             <div class="card-body" style="flex: 1; padding-left: 20px;">
                 <h5 class="card-title">Doppelzimmer Standard</h5>
-                <p class="card-text">Unser Doppelzimmer Standard bietet Ihnen eine gemütliche Atmosphäre und ist ideal für Reisende, die eine praktische und komfortable Unterkunft suchen. (200€ pro Nacht)</p>
+                <p class="card-text">Unser Doppelzimmer Standard bietet Ihnen eine gemütliche Atmosphäre und ist ideal für Reisende, die eine praktische und komfortable Unterkunft suchen.<br>(200€ pro Nacht)</p>
                 <?php if (in_array(5, $freieZimmerIds) || in_array(6, $freieZimmerIds)): ?>
                         <a href="reservation.php?checkin=<?php echo $checkin; ?>&checkout=<?php echo $checkout; ?>&guests=<?php echo $guests; ?>&zimmer=Doppelzimmer Standard" class="btn btn-primary">Jetzt buchen</a>
                     <?php else: ?>
@@ -215,7 +215,7 @@ $stmt->close();
             </div>
             <div class="card-body" style="flex: 1; padding-left: 20px;">
                 <h5 class="card-title">Einzelzimmer Premium</h5>
-                <p class="card-text">Ein stilvoll eingerichtetes Einzelzimmer mit gemütlichem Einzelbett und einem funktionalen Schreibtisch. Die moderne Ausstattung ist ideal für eine Auszeit nach einem langen Tag. (250€ pro Nacht)</p>
+                <p class="card-text">Ein stilvoll eingerichtetes Einzelzimmer mit gemütlichem Einzelbett und einem funktionalen Schreibtisch. Die moderne Ausstattung ist ideal für eine Auszeit nach einem langen Tag.<br>(250€ pro Nacht)</p>
                 <?php if ($guests > 1): ?>
                             <p class="text-info">Für 2 Gäste stehen unsere Doppelzimmer zur Verfügung.</p>
                         <?php elseif (in_array(7, $freieZimmerIds) || in_array(8, $freieZimmerIds)): ?>
@@ -250,7 +250,7 @@ $stmt->close();
             </div>
             <div class="card-body" style="flex: 1; padding-left: 20px;">
                 <h5 class="card-title">Einzelzimmer Deluxe</h5>
-                <p class="card-text">Helles, modern eingerichtetes Zimmer mit komfortablem Einzelbett, Schreibtisch und eigenem Bad. Perfekt für Geschäftsreisende und Alleinreisende, die Ruhe und Funktionalität schätzen. (200€ pro Nacht)</p>
+                <p class="card-text">Helles, modern eingerichtetes Zimmer mit komfortablem Einzelbett, Schreibtisch und eigenem Bad. Perfekt für Geschäftsreisende und Alleinreisende, die Ruhe und Funktionalität schätzen.<br>(200€ pro Nacht)</p>
                 <?php if ($guests > 1): ?>
                             <p class="text-info">Für 2 Gäste stehen unsere Doppelzimmer zur Verfügung.</p>
                         <?php elseif (in_array(9, $freieZimmerIds) || in_array(10, $freieZimmerIds)): ?>
@@ -285,7 +285,7 @@ $stmt->close();
                         </div>
                         <div class="card-body" style="flex: 1; padding-left: 20px;">
                         <h5 class="card-title">Einzelzimmer Standard</h5>
-                        <p class="card-text">Charmantes Zimmer mit bequemer Ausstattung, einem Einzelbett und stilvollem Dekor. Mit Flachbild-TV, Schreibtisch und eigenem Bad ideal für entspannte Aufenthalte. (150€ pro Nacht)</p>
+                        <p class="card-text">Charmantes Zimmer mit bequemer Ausstattung, einem Einzelbett und stilvollem Dekor. Mit Flachbild-TV, Schreibtisch und eigenem Bad ideal für entspannte Aufenthalte.<br>(150€ pro Nacht)</p>
                         <?php if ($guests > 1): ?>
                             <p class="text-info">Für 2 Gäste stehen unsere Doppelzimmer zur Verfügung.</p>
                         <?php elseif (in_array(11, $freieZimmerIds) || in_array(12, $freieZimmerIds)): ?>
