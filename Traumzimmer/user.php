@@ -1,21 +1,6 @@
 <?php
 session_start();
-
-// Dummy user data
-$users = [
-    'admin' => [
-        'password' => password_hash('1234', PASSWORD_DEFAULT),
-        'vorname' => 'Max',
-        'nachname' => 'Mustermann',
-        'email' => 'max@mustermann.de'
-    ],
-    'user1' => [
-        'password' => password_hash('passwort', PASSWORD_DEFAULT),
-        'vorname' => 'Eva',
-        'nachname' => 'Schmidt',
-        'email' => 'eva@schmidt.de'
-    ]
-];
+require 'dbaccess.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['username']) || !isset($users[$_SESSION['username']])) {
